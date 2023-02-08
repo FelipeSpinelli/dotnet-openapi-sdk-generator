@@ -8,9 +8,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<AdditionalFile Include="openapi.json" GeneratedApiClientName="IExampleApi" />
 		<CompilerVisibleProperty Include="GeneratedApiClientName" />
 		<CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="GeneratedApiClientName" />
+		<AdditionalFiles Include="openapi.json" GeneratedApiClientName="IPetApi"/>
 	</ItemGroup>
 
 	<ItemGroup>

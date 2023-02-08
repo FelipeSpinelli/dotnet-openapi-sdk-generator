@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenApiSdkGenerator", "src\OpenApiSdkGenerator\OpenApiSdkGenerator.csproj", "{E07014D7-CA32-41B7-89CE-05BFFAD7EA1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenApiSdkGenerator", "src\OpenApiSdkGenerator\OpenApiSdkGenerator.csproj", "{E07014D7-CA32-41B7-89CE-05BFFAD7EA1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenApiSdkGenerator.Sample", "src\OpenApiSdkGenerator.Sample\OpenApiSdkGenerator.Sample.csproj", "{AB708FAB-42B1-45BA-BDE0-3165FEC8F07B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenApiSdkGenerator.Sample", "src\OpenApiSdkGenerator.Sample\OpenApiSdkGenerator.Sample.csproj", "{AB708FAB-42B1-45BA-BDE0-3165FEC8F07B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

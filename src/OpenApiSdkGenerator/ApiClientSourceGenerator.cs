@@ -49,18 +49,25 @@ namespace OpenApiSdkGenerator
                 return;
             }
 
-            var apiDefinition = JsonConvert.DeserializeObject<ApiDefinition>(jsonContent);
+            try
+            {
+                var apiDefinition = JsonConvert.DeserializeObject<ApiDefinition>(jsonContent);
 
-            var content = GetContent(@namespace, apiDefinition);
+                var content = GetContent(@namespace, apiDefinition);
 
-            context.AddSource($"{(apiClientNameDefined ? generatedApiClientName : "ApiClient")}.g.cs", SourceText.From(content, Encoding.UTF8));
+                context.AddSource($"{(apiClientNameDefined ? generatedApiClientName : "ApiClient")}.g.cs", SourceText.From(content, Encoding.UTF8));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
         }
 
         static string GetContent(string @namespace, ApiDefinition apiDefinition)
         {
             return "namespace A { public class X { } }";
-            //var template = Template.Parse(CodeBoilerplates.MockController);
-            //return template.Render(new { Namespace = @namespace, Mocks = mocks });
+        //    var template = Template.Parse(CodeBoilerplates.MockController);
+        //    return template.Render(new { Namespace = @namespace, Mocks = mocks });
         }
     }
 }
