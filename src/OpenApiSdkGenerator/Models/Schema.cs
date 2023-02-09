@@ -19,9 +19,12 @@ namespace OpenApiSdkGenerator.Models
         public Schema[] Properties { get; set; } = Array.Empty<Schema>();
 
         [JsonProperty("_reference")]
-        public string Reference { get; set; } = null!;
+        public string? Reference { get; set; }
 
         [JsonProperty("items")]
         public Schema? Items { get; set; }
+
+        public string GetName() => Reference != null ?
+            Reference : "Schema";
     }
 }

@@ -2,6 +2,7 @@
 using OpenApiSdkGenerator.JsonConverters;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenApiSdkGenerator.Models
 {
@@ -19,5 +20,7 @@ namespace OpenApiSdkGenerator.Models
         [JsonProperty("paths")]
         [JsonConverter(typeof(DictionaryConverter<PathItem>))]
         public IDictionary<string, PathItem> Paths { get; set; } = new Dictionary<string, PathItem>(0);
+
+        public IEnumerable<Operation> Operations => Paths.SelectMany(path => path.Value.GetOperations(path.Key));
     }
 }

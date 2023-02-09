@@ -3,6 +3,8 @@ using Microsoft.CodeAnalysis.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using OpenApiSdkGenerator.Models;
+using Scriban;
+using Scriban.Runtime;
 using System;
 #if DEBUG
 using System.Diagnostics;
@@ -15,6 +17,15 @@ namespace OpenApiSdkGenerator
     [Generator]
     public class ApiClientSourceGenerator : ISourceGenerator
     {
+        private static readonly DiagnosticDescriptor InvalidJsonError = new DiagnosticDescriptor(id: "OPENAPISDKGEN001",
+                                                                                              title: "Couldn't parse json file",
+                                                                                              messageFormat: "Couldn't parse json file '{0}' Reason[{1}].",
+                                                                                              category: "OpenApiSdkGenerator",
+                                                                                              DiagnosticSeverity.Error,
+                                                                                              isEnabledByDefault: true);
+        private readonly TemplateContext _templateContext = new();
+        private ScriptObject _scriptObject;
+
         public void Initialize(GeneratorInitializationContext context)
         {
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
@@ -24,6 +35,13 @@ namespace OpenApiSdkGenerator
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 MissingMemberHandling = MissingMemberHandling.Ignore,
             };
+
+            var filters = new ScriptObject();
+            filters.Import(typeof(TemplateFilter));
+            _scriptObject = new ScriptObject
+            {
+                { "filters", filters }
+            };            
 #if DEBUG
             Debugger.Launch();
 #endif
@@ -33,48 +51,71 @@ namespace OpenApiSdkGenerator
         {
             const string OPENAPI_SPECIFICATION_FILENAME = "openapi.json";
 
-            var @namespace = context.Compilation?.AssemblyName ?? "OpenApiSdkGenerator";
-
-            var openapiFile = context.AdditionalFiles
-                .Where(f => f.Path.EndsWith(OPENAPI_SPECIFICATION_FILENAME, StringComparison.InvariantCultureIgnoreCase))
-                .FirstOrDefault();
-
-            if (openapiFile == null)
-            {
-                return;
-            }
-
-            var apiClientNameDefined = context
-                .AnalyzerConfigOptions
-                .GetOptions(openapiFile)
-                .TryGetValue("build_metadata.AdditionalFiles.GeneratedApiClientName", out var generatedApiClientName);
-
-            var jsonContent = openapiFile.GetText(context.CancellationToken)?.ToString();
-
-            if (jsonContent == null)
-            {
-                return;
-            }
-
+            var openapiFileName = string.Empty;
             try
             {
-                var apiDefinition = JsonConvert.DeserializeObject<ApiDefinition>(jsonContent.Replace("$ref", "_reference"));
-                
-                var content = GetContent(@namespace, apiDefinition);
+                var @namespace = context.Compilation?.AssemblyName ?? "OpenApiSdkGenerator";
 
-                context.AddSource($"{(apiClientNameDefined ? generatedApiClientName : "ApiClient")}.g.cs", SourceText.From(content, Encoding.UTF8));
+                var openapiFile = context.AdditionalFiles
+                    .Where(f => f.Path.EndsWith(OPENAPI_SPECIFICATION_FILENAME, StringComparison.InvariantCultureIgnoreCase))
+                    .FirstOrDefault();
+
+                if (openapiFile == null)
+                {
+                    return;
+                }
+
+                openapiFileName = openapiFile.Path;
+
+                var apiClientNameDefined = context
+                    .AnalyzerConfigOptions
+                    .GetOptions(openapiFile)
+                    .TryGetValue("build_metadata.AdditionalFiles.GeneratedApiClientName", out var generatedApiClientName);
+
+                var jsonContent = openapiFile.GetText(context.CancellationToken)?.ToString();
+
+                if (jsonContent == null)
+                {
+                    return;
+                }
+
+
+                var apiDefinition = JsonConvert.DeserializeObject<ApiDefinition>(jsonContent.Replace("$ref", "_reference"));
+                var apiClientName = apiClientNameDefined ? generatedApiClientName : "ApiClient";
+                var content = GetContent(@namespace, apiClientName, apiDefinition);
+
+                context.AddSource($"{apiClientName}.g.cs", SourceText.From(content, Encoding.UTF8));
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                context.ReportDiagnostic(Diagnostic.Create(InvalidJsonError, Location.None, openapiFileName, ex.Message));
             }
         }
 
-        static string GetContent(string @namespace, ApiDefinition apiDefinition)
+        private string GetContent(string @namespace, string apiClientName, ApiDefinition apiDefinition)
         {
-            return "namespace A { public class X { } }";
-        //    var template = Template.Parse(CodeBoilerplates.MockController);
-        //    return template.Render(new { Namespace = @namespace, Mocks = mocks });
+            
+            const string boilerplate =  @$"
+namespace {{{{ namespace }}}}
+{{
+    public interface {{{{ api_client_name }}}}
+    {{
+        {{{{ for operation in operations }}}}
+            [{{{{ operation.http_method }}}}(""{{{{ operation.path }}}}"")]
+            public Task<ApiResponse<{{{{ operation | filters.get_success_response_type }}}}>> {{{{ operation | filters.get_name }}}}({{{{ operation | filters.get_method_signature }}}});
+        {{{{ end }}}}
+    }}
+}}";
+            var template = Template.Parse(boilerplate);
+            _scriptObject.Import(new
+            {
+                Namespace = @namespace,
+                ApiClientName = apiClientName,
+                ApiDefinition = apiDefinition,
+                Operations = apiDefinition.Operations
+            });
+            _templateContext.PushGlobal(_scriptObject);
+            return template.Render(_templateContext);
         }
     }
 }
