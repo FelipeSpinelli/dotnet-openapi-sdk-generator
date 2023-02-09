@@ -1,8 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using OpenApiSdkGenerator.Models;
-using Scriban;
 using System;
 #if DEBUG
 using System.Diagnostics;
@@ -17,6 +17,13 @@ namespace OpenApiSdkGenerator
     {
         public void Initialize(GeneratorInitializationContext context)
         {
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                TypeNameHandling = TypeNameHandling.None,
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                MissingMemberHandling = MissingMemberHandling.Ignore,
+            };
 #if DEBUG
             Debugger.Launch();
 #endif
@@ -51,8 +58,8 @@ namespace OpenApiSdkGenerator
 
             try
             {
-                var apiDefinition = JsonConvert.DeserializeObject<ApiDefinition>(jsonContent);
-
+                var apiDefinition = JsonConvert.DeserializeObject<ApiDefinition>(jsonContent.Replace("$ref", "_reference"));
+                
                 var content = GetContent(@namespace, apiDefinition);
 
                 context.AddSource($"{(apiClientNameDefined ? generatedApiClientName : "ApiClient")}.g.cs", SourceText.From(content, Encoding.UTF8));
