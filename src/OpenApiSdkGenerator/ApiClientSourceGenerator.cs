@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using OpenApiSdkGenerator.Models;
 using Scriban;
-using Scriban.Runtime;
 using System;
 #if DEBUG
 using System.Diagnostics;
@@ -23,9 +22,6 @@ namespace OpenApiSdkGenerator
                                                                                               category: "OpenApiSdkGenerator",
                                                                                               DiagnosticSeverity.Error,
                                                                                               isEnabledByDefault: true);
-        private readonly TemplateContext _templateContext = new();
-        private ScriptObject _scriptObject;
-
         public void Initialize(GeneratorInitializationContext context)
         {
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
@@ -36,15 +32,9 @@ namespace OpenApiSdkGenerator
                 MissingMemberHandling = MissingMemberHandling.Ignore,
             };
 
-            var filters = new ScriptObject();
-            filters.Import(typeof(TemplateFilter));
-            _scriptObject = new ScriptObject
-            {
-                { "filters", filters }
-            };            
-#if DEBUG
-            Debugger.Launch();
-#endif
+//#if DEBUG
+//            Debugger.Launch();
+//#endif
         }
 
         public void Execute(GeneratorExecutionContext context)
@@ -80,9 +70,13 @@ namespace OpenApiSdkGenerator
                 }
 
 
+                ApiDefinition.SetNamespace(@namespace);
                 var apiDefinition = JsonConvert.DeserializeObject<ApiDefinition>(jsonContent.Replace("$ref", "_reference"));
+                apiDefinition.RegisterReferences();
+                apiDefinition.GenerateTypes(context);
+
                 var apiClientName = apiClientNameDefined ? generatedApiClientName : "ApiClient";
-                var content = GetContent(@namespace, apiClientName, apiDefinition);
+                var content = GetContent(apiClientName, apiDefinition);
 
                 context.AddSource($"{apiClientName}.g.cs", SourceText.From(content, Encoding.UTF8));
             }
@@ -92,30 +86,16 @@ namespace OpenApiSdkGenerator
             }
         }
 
-        private string GetContent(string @namespace, string apiClientName, ApiDefinition apiDefinition)
+        private string GetContent(string apiClientName, ApiDefinition apiDefinition)
         {
-            
-            const string boilerplate =  @$"
-namespace {{{{ namespace }}}}
-{{
-    public interface {{{{ api_client_name }}}}
-    {{
-        {{{{ for operation in operations }}}}
-            [{{{{ operation.http_method }}}}(""{{{{ operation.path }}}}"")]
-            public Task<ApiResponse<{{{{ operation | filters.get_success_response_type }}}}>> {{{{ operation | filters.get_name }}}}({{{{ operation | filters.get_method_signature }}}});
-        {{{{ end }}}}
-    }}
-}}";
-            var template = Template.Parse(boilerplate);
-            _scriptObject.Import(new
+            var template = Template.Parse(CodeBoilerplates.ApiClientInterface);
+            return template.Render(new
             {
-                Namespace = @namespace,
+                Namespace = ApiDefinition.GetNamespace(),
                 ApiClientName = apiClientName,
                 ApiDefinition = apiDefinition,
-                Operations = apiDefinition.Operations
+                apiDefinition.Operations
             });
-            _templateContext.PushGlobal(_scriptObject);
-            return template.Render(_templateContext);
         }
     }
 }

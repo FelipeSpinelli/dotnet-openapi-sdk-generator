@@ -1,8 +1,11 @@
 ﻿using Newtonsoft.Json;
+using OpenApiSdkGenerator.Extensions;
 using OpenApiSdkGenerator.JsonConverters;
+using Scriban;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 
 namespace OpenApiSdkGenerator.Models
@@ -42,13 +45,73 @@ namespace OpenApiSdkGenerator.Models
         [JsonConverter(typeof(DictionaryConverter<Response>))]
         public IDictionary<string, Response> Responses { get; set; }
 
-        public string Name => OperationId ?? Tags[0] ?? Regex.Replace($"{HttpMethod}{Path}", VALID_NAME_CHARACTERS_PATTERN, "");
-        public string SuccessResponseType => Responses
-            .Where(x => short.TryParse(x.Key, out var statusCode) && statusCode >= 200 && statusCode < 300)
-            .First()
-            .Value.Content.First().Value
-            .GetName();
+        public override string ToString()
+        {
+            var template = Template.Parse(CodeBoilerplates.ApiClientOperation);
+            return template.Render(new
+            {
+                HttpMethod,
+                Path,
+                Response = GetSuccessResponseType(),
+                Name = GetName(),
+                MethodSignature = GetMethodSignature()
+            });
+        }
 
-        public string MethodSignature => "";
+        public string GetName() => string.Join("", (OperationId ?? Tags[0] ?? Regex.Replace($"{HttpMethod}{Path}", VALID_NAME_CHARACTERS_PATTERN, ""))
+            .Split(' ')
+            .Select(x => x.ToPascalCase()));
+
+        private string GetSuccessResponseType()
+        {
+            var successResponse = Responses
+                .FirstOrDefault(x => short.TryParse(x.Key, out var statusCode) && statusCode >= 200 && statusCode < 300);
+
+            if (successResponse.Key == ((int)HttpStatusCode.NoContent).ToString())
+            {
+                return "NoContentResponse";
+            }
+
+            var mediaType = successResponse.Value.Content.First().Value;
+            return mediaType.GetTypeName();
+        }
+
+        private string GetMethodSignature()
+        {
+            return string.Join(",", new[]
+            {
+                GetMethodParametersFromPath(),
+                GetMethodParametersFromHeaders(),
+                GetMethodParametersFromQuery(),
+                RequestBody?.ToString() ?? string.Empty
+
+            }.Where(x => !string.IsNullOrWhiteSpace(x)));
+        }
+
+        private string GetMethodParametersFromPath()
+        {
+            return string.Join(",", Parameters.Where(p => p.In == Enumerators.ParameterLocation.Path).Select(p => p.ToString()));
+        }
+
+        private string GetMethodParametersFromHeaders()
+        {
+            return string.Join(",", Parameters.Where(p => p.In == Enumerators.ParameterLocation.Header).Select(p => p.ToString()));
+        }
+
+        private string GetMethodParametersFromQuery()
+        {
+            if (!Parameters.Any(x=>x.In == Enumerators.ParameterLocation.Query))
+            {
+                return string.Empty;
+            }
+
+            var queryParamsClassName = Parameter.GetAsQueryParamsClassName(GetName());
+            if (string.IsNullOrWhiteSpace(queryParamsClassName))
+            {
+                return string.Empty;
+            }
+
+            return $"[Query] {queryParamsClassName} query";
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace OpenApiSdkGenerator.Models.Enumerators
 {
     public enum DataType
     {
+        Reference,
         [EnumMember(Value = "integer")]
         Integer,
         [EnumMember(Value = "number")]

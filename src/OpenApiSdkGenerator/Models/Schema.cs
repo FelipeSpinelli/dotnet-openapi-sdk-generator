@@ -1,22 +1,34 @@
 ﻿using Newtonsoft.Json;
+using OpenApiSdkGenerator.Extensions;
+using OpenApiSdkGenerator.JsonConverters;
 using OpenApiSdkGenerator.Models.Enumerators;
+using Scriban;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenApiSdkGenerator.Models
 {
     public record Schema
     {
+        [JsonProperty("allOf")]
+        public Schema[] AllOf { get; set; } = Array.Empty<Schema>();
+
         [JsonProperty("type")]
         public DataType Type { get; set; }
 
         [JsonProperty("format")]
         public DataFormat? Format { get; set; }
 
+        [JsonProperty("nullable")]
+        public bool Nullable { get; set; }
+
         [JsonProperty("required")]
         public string[] RequiredProperties { get; set; } = null!;
 
         [JsonProperty("properties")]
-        public Schema[] Properties { get; set; } = Array.Empty<Schema>();
+        [JsonConverter(typeof(DictionaryConverter<Schema>))]
+        public IDictionary<string, Schema> Properties { get; set; } = new Dictionary<string, Schema>();
 
         [JsonProperty("_reference")]
         public string? Reference { get; set; }
@@ -24,7 +36,59 @@ namespace OpenApiSdkGenerator.Models
         [JsonProperty("items")]
         public Schema? Items { get; set; }
 
-        public string GetName() => Reference != null ?
-            Reference : "Schema";
+        public string Name { get; private set; }
+
+        public string SetName(string name) => Name = name;
+
+        public string? GetTypeName()
+        {
+            const string OBJECT_SCHEMA_NAME = "object";
+            var name = (Type, Format) switch
+            {
+                (DataType.Reference, _) => Schema.GetByReference(Reference)?.Name ?? OBJECT_SCHEMA_NAME,
+                (DataType.Integer, DataFormat.Int32) => "int",
+                (DataType.Integer, DataFormat.Int64) => "long",
+                (DataType.Integer, _) => "int",
+                (DataType.Number, DataFormat.Float) => "float",
+                (DataType.Number, DataFormat.Double) => "double",
+                (DataType.String, DataFormat.DateTime) => "DateTime",
+                (DataType.String, _) => "string",
+                (DataType.Array, _) => $"{Items?.GetTypeName() ?? OBJECT_SCHEMA_NAME}[]",
+                (DataType.Object, _) => OBJECT_SCHEMA_NAME,
+                (_, _) => OBJECT_SCHEMA_NAME,
+            };
+
+            return $"{name}{(Nullable ? "?" : string.Empty)}";
+        }
+
+        public override string ToString()
+        {
+            var properties = GetProperties()
+                .Concat(AllOf.SelectMany(x => x.GetProperties()))
+                .Distinct()
+                .ToList();
+
+            var template = Template.Parse(CodeBoilerplates.ApiClientType);
+            return template.Render(new
+            {
+                Namespace = ApiDefinition.GetNamespace(),
+                Name,
+                Properties = properties
+            });
+        }
+
+        public string[] GetProperties()
+        {
+            if (Type == DataType.Reference)
+            {
+                return Schema.GetByReference(Reference)?.GetProperties() ?? Array.Empty<string>();
+            }
+
+            return Properties
+                .Select(x => $"public {x.Value.GetTypeName()} {x.Key.ToPascalCase()} {{ get; set; }}")
+                .ToArray();
+        }
+
+        public static Schema? GetByReference(string reference) => ApiDefinition.GetSchemaByReference(reference);
     }
 }

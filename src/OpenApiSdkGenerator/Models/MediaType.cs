@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
 
 namespace OpenApiSdkGenerator.Models
 {
@@ -11,7 +12,17 @@ namespace OpenApiSdkGenerator.Models
         [JsonProperty("schema")]
         public Schema? Schema { get; set; }
 
-        public string GetName() => Reference != null ?
-            Reference : Schema?.GetName();
+        public string GetTypeName() => (Reference != null ?
+            Schema.GetByReference(Reference) : Schema)?.GetTypeName() ?? string.Empty;
+
+        public string[] GetProperties()
+        {
+            if (string.IsNullOrWhiteSpace(Reference))
+            {
+                return Schema?.GetProperties() ?? Array.Empty<string>();
+            }
+
+            return Schema.GetByReference(Reference)?.GetProperties() ?? Array.Empty<string>();
+        }
     }
 }
