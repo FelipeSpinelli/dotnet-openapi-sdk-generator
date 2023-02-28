@@ -131,7 +131,10 @@ namespace {{ namespace }}
 }</value>
   </data>
   <data name="ApiClientOperation" xml:space="preserve">
-    <value>[{{ http_method }}("{{ path }}")]public Task&lt;ApiResponse&lt;{{ response }}&gt;&gt; {{ name }}({{ method_signature }});</value>
+    <value>{{for attribute in attributes}}
+    {{ attribute }}
+{{end}}
+[{{ http_method }}("{{ path }}")]public Task&lt;ApiResponse&lt;{{ response }}&gt;&gt; {{ name }}({{ method_signature }});</value>
   </data>
   <data name="ApiClientType" xml:space="preserve">
     <value>namespace {{ namespace }}

@@ -39,7 +39,7 @@ namespace OpenApiSdkGenerator
 
         public void Execute(GeneratorExecutionContext context)
         {
-            const string OPENAPI_SPECIFICATION_FILENAME = "openapi.json";
+            const string SDK_DEFINITIONS_FILENAME = "openapi-sdk-generator.yaml";
 
             var openapiFileName = string.Empty;
             try
@@ -47,8 +47,7 @@ namespace OpenApiSdkGenerator
                 var @namespace = context.Compilation?.AssemblyName ?? "OpenApiSdkGenerator";
 
                 var openapiFile = context.AdditionalFiles
-                    .Where(f => f.Path.EndsWith(OPENAPI_SPECIFICATION_FILENAME, StringComparison.InvariantCultureIgnoreCase))
-                    .FirstOrDefault();
+                    .FirstOrDefault(f => !f.Path.EndsWith(SDK_DEFINITIONS_FILENAME, StringComparison.InvariantCultureIgnoreCase));
 
                 if (openapiFile == null)
                 {
@@ -69,11 +68,17 @@ namespace OpenApiSdkGenerator
                     return;
                 }
 
-
                 ApiDefinition.SetNamespace(@namespace);
+                LoadSdkDefinitions(context, SDK_DEFINITIONS_FILENAME);
                 var apiDefinition = JsonConvert.DeserializeObject<ApiDefinition>(jsonContent.Replace("$ref", "_reference"));
+                if (apiDefinition == null)
+                {
+                    return;
+                }
+
+
                 apiDefinition.RegisterReferences();
-                apiDefinition.GenerateTypes(context);
+                apiDefinition.GenerateTypes(context);                
 
                 var apiClientName = apiClientNameDefined ? generatedApiClientName : "ApiClient";
                 var content = GetContent(apiClientName, apiDefinition);
@@ -84,6 +89,15 @@ namespace OpenApiSdkGenerator
             {
                 context.ReportDiagnostic(Diagnostic.Create(InvalidJsonError, Location.None, openapiFileName, ex.Message));
             }
+        }
+
+        private static void LoadSdkDefinitions(GeneratorExecutionContext context, string SDK_DEFINITIONS_FILENAME)
+        {
+            var sdkDefinitionsText = context.AdditionalFiles
+                .FirstOrDefault(f => f.Path.EndsWith(SDK_DEFINITIONS_FILENAME, StringComparison.InvariantCultureIgnoreCase))?
+                .GetText(context.CancellationToken)?.ToString() ?? string.Empty;
+
+            ApiDefinition.LoadApiDefinitionOptions(sdkDefinitionsText);
         }
 
         private string GetContent(string apiClientName, ApiDefinition apiDefinition)

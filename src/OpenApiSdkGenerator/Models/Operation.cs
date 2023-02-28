@@ -45,6 +45,12 @@ namespace OpenApiSdkGenerator.Models
         [JsonConverter(typeof(DictionaryConverter<Response>))]
         public IDictionary<string, Response> Responses { get; set; }
 
+        [JsonIgnore]
+        public string[] Attributes { get; set; } = Array.Empty<string>();
+
+        [JsonIgnore]
+        public bool ShouldBeGenerated { get; set; } = true;
+
         public override string ToString()
         {
             var template = Template.Parse(CodeBoilerplates.ApiClientOperation);
@@ -54,11 +60,17 @@ namespace OpenApiSdkGenerator.Models
                 Path,
                 Response = GetSuccessResponseType(),
                 Name = GetName(),
-                MethodSignature = GetMethodSignature()
+                MethodSignature = GetMethodSignature(),
+                Attributes
             });
         }
 
-        public string GetName() => string.Join("", (OperationId ?? Tags[0] ?? Regex.Replace($"{HttpMethod}{Path}", VALID_NAME_CHARACTERS_PATTERN, ""))
+        public string GetName() => string.Join("",
+            (
+                OperationId ??
+                Tags.FirstOrDefault(x => !x.Equals(nameof(OpenApiSdkGenerator), StringComparison.InvariantCultureIgnoreCase)) ??
+                Regex.Replace($"{HttpMethod}{Path}", VALID_NAME_CHARACTERS_PATTERN, "")
+            )
             .Split(' ')
             .Select(x => x.ToPascalCase()));
 
@@ -100,7 +112,7 @@ namespace OpenApiSdkGenerator.Models
 
         private string GetMethodParametersFromQuery()
         {
-            if (!Parameters.Any(x=>x.In == Enumerators.ParameterLocation.Query))
+            if (!Parameters.Any(x => x.In == Enumerators.ParameterLocation.Query))
             {
                 return string.Empty;
             }
@@ -112,6 +124,25 @@ namespace OpenApiSdkGenerator.Models
             }
 
             return $"[Query] {queryParamsClassName} query";
+        }
+
+        public Operation ApplySdkOptions(SdkOptions? options)
+        {
+            if (options == null)
+            {
+                return this;
+            }
+
+            var sdkOperationOptions = options.Operations.FirstOrDefault(x => x.Name.Equals(GetName()));
+
+            return this with
+            {
+                ShouldBeGenerated = !(sdkOperationOptions?.Ignore ?? false),
+                Attributes = (options
+                    .DefaultOperationAttributes ?? Array.Empty<string>())
+                    .Concat(sdkOperationOptions?.Attributes ?? Array.Empty<string>())
+                    .ToArray()
+            };
         }
     }
 }

@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using YamlDotNet.Core;
+using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.Serialization;
 
 namespace OpenApiSdkGenerator.Models
 {
@@ -14,6 +17,7 @@ namespace OpenApiSdkGenerator.Models
         private static readonly IDictionary<string, Schema> _globalReferences = new Dictionary<string, Schema>();
         private static readonly IDictionary<string, string> _queryParamsClass = new Dictionary<string, string>();
         private static string _namespace;
+        private static SdkOptions? _options;
 
         [JsonProperty("openapi")]
         public string OpenApiVersion { get; set; } = "3.0.1";
@@ -31,11 +35,33 @@ namespace OpenApiSdkGenerator.Models
         [JsonProperty("components")]
         public Components? Components { get; set; }
 
-        public IEnumerable<Operation> Operations => Paths.SelectMany(path => path.Value.GetOperations(path.Key));
+        public IEnumerable<Operation> Operations => Paths
+            .SelectMany(path => path.Value.GetOperations(path.Key))
+            .Select(operation => operation.ApplySdkOptions(_options))
+            .Where(operation => operation.ShouldBeGenerated);
 
         public static void SetNamespace(string @namespace) => _namespace = @namespace;
         public static string GetNamespace() => _namespace;
 
+        public static void LoadApiDefinitionOptions(string rawOptions)
+        {
+            if (string.IsNullOrEmpty(rawOptions))
+            {
+                _options = new();
+                return;
+            }
+
+            if (_options != null)
+            {
+                return;
+            }
+
+            var deserializer = new DeserializerBuilder()
+                .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                .Build();
+
+            _options = deserializer.Deserialize<SdkOptions>(rawOptions);
+        }
         public void RegisterReferences()
         {
             _globalReferences.Clear();
@@ -90,5 +116,10 @@ namespace OpenApiSdkGenerator.Models
         public static Schema? GetSchemaByReference(string reference) => _globalReferences.ContainsKey(reference ?? string.Empty)
             ? _globalReferences[reference]
             : null;
+
+        public bool OperationMustBeGenerated(string operationName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

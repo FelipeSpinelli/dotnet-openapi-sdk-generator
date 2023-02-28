@@ -1,0 +1,6 @@
+﻿operations:
+  - name: AddPet
+    attributes:
+      - "[Obsolete]"
+  - name: DeletePet
+    ignore: true

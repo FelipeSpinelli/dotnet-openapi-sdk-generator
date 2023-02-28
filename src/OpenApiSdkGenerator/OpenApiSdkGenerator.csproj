@@ -40,12 +40,15 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" GeneratePathProperty="true" PrivateAssets="all" />
 		
 		<PackageReference Include="Scriban" Version="5.6.0" GeneratePathProperty="true" PrivateAssets="all" />
+		
+		<PackageReference Include="YamlDotNet" Version="13.0.1" GeneratePathProperty="true" PrivateAssets="all" />
 
 		<None Include="$(PkgScriban)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 		<None Include="$(PkgNewtonsoft_Json)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 		<None Include="$(PkgRefit)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 		<None Include="$(PkgRefit_HttpClientFactory)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 		<None Include="$(PkgRefit_Newtonsoft_Json)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="$(PkgYamlDotNet)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -74,6 +77,7 @@
 			<TargetPathWithTargetPlatformMoniker Include="$(PkgRefit)\lib\netstandard2.0\*.dll" IncludeRuntimeDependency="false" />
 			<TargetPathWithTargetPlatformMoniker Include="$(PkgRefit_HttpClientFactory)\lib\netstandard2.0\*.dll" IncludeRuntimeDependency="false" />
 			<TargetPathWithTargetPlatformMoniker Include="$(PkgRefit_Newtonsoft_Json)\lib\netstandard2.0\*.dll" IncludeRuntimeDependency="false" />
+			<TargetPathWithTargetPlatformMoniker Include="$(PkgYamlDotNet)\lib\netstandard2.0\*.dll" IncludeRuntimeDependency="false" />
 		</ItemGroup>
 	</Target>
 
