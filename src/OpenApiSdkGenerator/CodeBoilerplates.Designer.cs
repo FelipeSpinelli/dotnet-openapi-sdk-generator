@@ -63,6 +63,9 @@ namespace OpenApiSdkGenerator {
         /// <summary>
         ///   Looks up a localized string similar to // &lt;auto-generated /&gt;
         ///using Refit;
+        ///{{for using in usings}}
+        ///   using {{ using }};
+        ///{{end}}
         ///namespace {{ namespace }}
         ///{
         ///    public interface {{ api_client_name }}

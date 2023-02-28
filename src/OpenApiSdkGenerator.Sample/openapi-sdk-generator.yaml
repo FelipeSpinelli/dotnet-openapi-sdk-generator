@@ -1,4 +1,6 @@
-﻿operations:
+﻿usings:
+  - "System"
+operations:
   - name: AddPet
     attributes:
       - "[Obsolete]"

@@ -17,7 +17,7 @@ namespace OpenApiSdkGenerator.Models
         private static readonly IDictionary<string, Schema> _globalReferences = new Dictionary<string, Schema>();
         private static readonly IDictionary<string, string> _queryParamsClass = new Dictionary<string, string>();
         private static string _namespace;
-        private static SdkOptions? _options;
+        public static SdkOptions? Options { get; private set; }
 
         [JsonProperty("openapi")]
         public string OpenApiVersion { get; set; } = "3.0.1";
@@ -37,7 +37,7 @@ namespace OpenApiSdkGenerator.Models
 
         public IEnumerable<Operation> Operations => Paths
             .SelectMany(path => path.Value.GetOperations(path.Key))
-            .Select(operation => operation.ApplySdkOptions(_options))
+            .Select(operation => operation.ApplySdkOptions(Options))
             .Where(operation => operation.ShouldBeGenerated);
 
         public static void SetNamespace(string @namespace) => _namespace = @namespace;
@@ -47,11 +47,11 @@ namespace OpenApiSdkGenerator.Models
         {
             if (string.IsNullOrEmpty(rawOptions))
             {
-                _options = new();
+                Options = new();
                 return;
             }
 
-            if (_options != null)
+            if (Options != null)
             {
                 return;
             }
@@ -60,7 +60,7 @@ namespace OpenApiSdkGenerator.Models
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
                 .Build();
 
-            _options = deserializer.Deserialize<SdkOptions>(rawOptions);
+            Options = deserializer.Deserialize<SdkOptions>(rawOptions);
         }
         public void RegisterReferences()
         {

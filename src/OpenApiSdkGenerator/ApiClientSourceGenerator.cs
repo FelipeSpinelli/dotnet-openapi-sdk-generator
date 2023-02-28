@@ -105,6 +105,7 @@ namespace OpenApiSdkGenerator
             var template = Template.Parse(CodeBoilerplates.ApiClientInterface);
             return template.Render(new
             {
+                Usings = ApiDefinition.Options?.Usings ?? Array.Empty<string>(),
                 Namespace = ApiDefinition.GetNamespace(),
                 ApiClientName = apiClientName,
                 ApiDefinition = apiDefinition,

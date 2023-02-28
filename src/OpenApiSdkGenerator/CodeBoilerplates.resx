@@ -120,6 +120,9 @@
   <data name="ApiClientInterface" xml:space="preserve">
     <value>// &lt;auto-generated /&gt;
 using Refit;
+{{for using in usings}}
+   using {{ using }};
+{{end}}
 namespace {{ namespace }}
 {
     public interface {{ api_client_name }}
