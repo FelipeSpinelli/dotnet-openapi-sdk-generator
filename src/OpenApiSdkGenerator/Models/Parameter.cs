@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using OpenApiSdkGenerator.Extensions;
 using OpenApiSdkGenerator.JsonConverters;
 using OpenApiSdkGenerator.Models.Enumerators;
 using Scriban;
@@ -30,31 +31,31 @@ namespace OpenApiSdkGenerator.Models
 
         public override string ToString()
         {
+            var nameAsPascalCase = Name.ToPascalCase();
             var decorator = In switch
             {
-                ParameterLocation.Query => $"[Query(\"{Name}\")]",
-                ParameterLocation.Header => $"[Header(\"{Name}\")]",
+                ParameterLocation.Query => $"[Query(\"{nameAsPascalCase}\")]\r\n",
+                ParameterLocation.Header => $"[Header(\"{nameAsPascalCase}\")]\r\n",
                 _ => string.Empty
             };
 
-            if (Schema != null)
-            {
-                return $"{decorator} {Schema.GetTypeName()} {Name}";
-            }
-
-            return $"{decorator} {Content.First().Value.GetTypeName()} {Name}";
+            return $"{decorator}public {(Schema != null ? Schema.GetTypeName() : Content.First().Value.GetTypeName())} {nameAsPascalCase} {{ get; set; }}";
         }
 
         public static string GetAsQueryClass(string operationName, IEnumerable<Parameter> parameters)
         {
+            if (parameters.Any(p => p.In != ParameterLocation.Query))
+            {
+                throw new ArgumentException("Query parameters class only accepts parameter which In equals 'query'!");
+            }
+
             var properties = parameters
                 .Where(p => p.In == ParameterLocation.Query)
-                .SelectMany(p => p.Schema?.GetProperties() ?? Array.Empty<string>())
-                .Concat(parameters.SelectMany(p => p.Content?.First().Value.GetProperties() ?? Array.Empty<string>()))
+                .Select(p => p.ToString())
                 .Distinct()
                 .ToList();
 
-            if (properties.Any())
+            if (!properties.Any())
             {
                 return string.Empty;
             }

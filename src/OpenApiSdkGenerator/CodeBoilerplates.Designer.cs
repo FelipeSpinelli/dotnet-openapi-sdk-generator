@@ -64,15 +64,15 @@ namespace OpenApiSdkGenerator {
         ///   Looks up a localized string similar to // &lt;auto-generated /&gt;
         ///using Refit;
         ///{{for using in usings}}
-        ///   using {{ using }};
+        ///using {{ using }};
         ///{{end}}
         ///namespace {{ namespace }}
         ///{
         ///    public interface {{ api_client_name }}
         ///    {
-        ///    {{ for operation in operations }}
+        ///{{ for operation in operations }}
         ///        {{ operation }}
-        ///    {{ end }}
+        ///{{ end }}
         ///    }
         ///}.
         /// </summary>
@@ -84,9 +84,10 @@ namespace OpenApiSdkGenerator {
         
         /// <summary>
         ///   Looks up a localized string similar to {{for attribute in attributes}}
-        ///    {{ attribute }}
+        ///{{ attribute }}
         ///{{end}}
-        ///[{{ http_method }}(&quot;{{ path }}&quot;)]public Task&lt;ApiResponse&lt;{{ response }}&gt;&gt; {{ name }}({{ method_signature }});.
+        ///[{{ http_method }}(&quot;{{ path }}&quot;)]
+        ///public Task&lt;ApiResponse&lt;{{ response }}&gt;&gt; {{ name }}({{ method_signature }});.
         /// </summary>
         internal static string ApiClientOperation {
             get {
@@ -95,13 +96,15 @@ namespace OpenApiSdkGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace {{ namespace }}
+        ///   Looks up a localized string similar to // &lt;auto-generated /&gt;
+        ///using Refit;
+        ///namespace {{ namespace }}
         ///{
         ///    public class {{ name }}
         ///    {
-        ///        {{ for property in properties }}
-        ///            {{ property }}
-        ///        {{ end }}
+        ///{{ for property in properties }}
+        ///        {{ property }}
+        ///{{ end }}
         ///    }
         ///}.
         /// </summary>

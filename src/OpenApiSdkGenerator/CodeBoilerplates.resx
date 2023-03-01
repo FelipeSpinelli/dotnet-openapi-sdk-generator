@@ -121,32 +121,35 @@
     <value>// &lt;auto-generated /&gt;
 using Refit;
 {{for using in usings}}
-   using {{ using }};
+using {{ using }};
 {{end}}
 namespace {{ namespace }}
 {
     public interface {{ api_client_name }}
     {
-    {{ for operation in operations }}
+{{ for operation in operations }}
         {{ operation }}
-    {{ end }}
+{{ end }}
     }
 }</value>
   </data>
   <data name="ApiClientOperation" xml:space="preserve">
     <value>{{for attribute in attributes}}
-    {{ attribute }}
+{{ attribute }}
 {{end}}
-[{{ http_method }}("{{ path }}")]public Task&lt;ApiResponse&lt;{{ response }}&gt;&gt; {{ name }}({{ method_signature }});</value>
+[{{ http_method }}("{{ path }}")]
+public Task&lt;ApiResponse&lt;{{ response }}&gt;&gt; {{ name }}({{ method_signature }});</value>
   </data>
   <data name="ApiClientType" xml:space="preserve">
-    <value>namespace {{ namespace }}
+    <value>// &lt;auto-generated /&gt;
+using Refit;
+namespace {{ namespace }}
 {
     public class {{ name }}
     {
-        {{ for property in properties }}
-            {{ property }}
-        {{ end }}
+{{ for property in properties }}
+        {{ property }}
+{{ end }}
     }
 }</value>
   </data>
