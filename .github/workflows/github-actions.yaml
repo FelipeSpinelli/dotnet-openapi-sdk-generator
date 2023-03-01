@@ -23,13 +23,8 @@ jobs:
       with:
         dotnet-version: '6.0.x'    
 
-    - uses: kzrnm/get-net-sdk-project-versions-action@v1
-      id: get-version
-      with:
-        proj-path: src/OpenApiSdkGenerator/OpenApiSdkGenerator.csproj
-
     - name: Build with dotnet
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release /p:Version=${{ github.ref_name }}
 
     - name: Test
       run: dotnet test
