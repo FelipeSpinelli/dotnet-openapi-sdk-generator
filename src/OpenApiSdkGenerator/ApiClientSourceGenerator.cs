@@ -18,7 +18,7 @@ namespace OpenApiSdkGenerator
     {
         private static readonly DiagnosticDescriptor InvalidJsonError = new DiagnosticDescriptor(id: "OPENAPISDKGEN001",
                                                                                               title: "Couldn't parse json file",
-                                                                                              messageFormat: "Couldn't parse json file '{0}' Reason[{1}].",
+                                                                                              messageFormat: "Couldn't parse json file '{0}' Reason[{1}]",
                                                                                               category: "OpenApiSdkGenerator",
                                                                                               DiagnosticSeverity.Error,
                                                                                               isEnabledByDefault: true);
@@ -68,17 +68,17 @@ namespace OpenApiSdkGenerator
                     return;
                 }
 
-                ApiDefinition.SetNamespace(@namespace);
-                LoadSdkDefinitions(context, SDK_DEFINITIONS_FILENAME);
                 var apiDefinition = JsonConvert.DeserializeObject<ApiDefinition>(jsonContent.Replace("$ref", "_reference"));
                 if (apiDefinition == null)
                 {
                     return;
                 }
 
-
+                apiDefinition.SetNamespace(@namespace);
+                LoadSdkDefinitions(context, SDK_DEFINITIONS_FILENAME, apiDefinition);
+                apiDefinition.SetAsCurrent();
                 apiDefinition.RegisterReferences();
-                apiDefinition.GenerateTypes(context);                
+                apiDefinition.GenerateTypes(context);
 
                 var apiClientName = apiClientNameDefined ? generatedApiClientName : "ApiClient";
                 var content = GetContent(apiClientName, apiDefinition);
@@ -91,13 +91,13 @@ namespace OpenApiSdkGenerator
             }
         }
 
-        private static void LoadSdkDefinitions(GeneratorExecutionContext context, string SDK_DEFINITIONS_FILENAME)
+        private static void LoadSdkDefinitions(GeneratorExecutionContext context, string SDK_DEFINITIONS_FILENAME, ApiDefinition apiDefinition)
         {
             var sdkDefinitionsText = context.AdditionalFiles
                 .FirstOrDefault(f => f.Path.EndsWith(SDK_DEFINITIONS_FILENAME, StringComparison.InvariantCultureIgnoreCase))?
                 .GetText(context.CancellationToken)?.ToString() ?? string.Empty;
 
-            ApiDefinition.LoadApiDefinitionOptions(sdkDefinitionsText);
+            apiDefinition.LoadApiDefinitionOptions(sdkDefinitionsText);
         }
 
         private string GetContent(string apiClientName, ApiDefinition apiDefinition)
@@ -105,7 +105,7 @@ namespace OpenApiSdkGenerator
             var template = Template.Parse(CodeBoilerplates.ApiClientInterface);
             return template.Render(new
             {
-                Usings = ApiDefinition.Options?.Usings ?? Array.Empty<string>(),
+                Usings = apiDefinition.Options?.Usings ?? Array.Empty<string>(),
                 Namespace = ApiDefinition.GetNamespace(),
                 ApiClientName = apiClientName,
                 ApiDefinition = apiDefinition,

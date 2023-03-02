@@ -7,6 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenApiSdkGenerator", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenApiSdkGenerator.Sample", "src\OpenApiSdkGenerator.Sample\OpenApiSdkGenerator.Sample.csproj", "{AB708FAB-42B1-45BA-BDE0-3165FEC8F07B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F9F28E2A-B875-4884-9C66-28DFA9EB9170}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevOps", "DevOps", "{398FCF80-B563-4C37-A5A0-4BCCFE21BDB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{EDB3299F-3BEE-452D-8230-991BAF6182E4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{6A20737F-6929-43EF-B941-8093F4F199E7}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\github-actions.yaml = .github\workflows\github-actions.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +35,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E07014D7-CA32-41B7-89CE-05BFFAD7EA1A} = {F9F28E2A-B875-4884-9C66-28DFA9EB9170}
+		{AB708FAB-42B1-45BA-BDE0-3165FEC8F07B} = {F9F28E2A-B875-4884-9C66-28DFA9EB9170}
+		{EDB3299F-3BEE-452D-8230-991BAF6182E4} = {398FCF80-B563-4C37-A5A0-4BCCFE21BDB6}
+		{6A20737F-6929-43EF-B941-8093F4F199E7} = {EDB3299F-3BEE-452D-8230-991BAF6182E4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC9E71A3-D10A-495C-AA3D-4363E88CDF38}

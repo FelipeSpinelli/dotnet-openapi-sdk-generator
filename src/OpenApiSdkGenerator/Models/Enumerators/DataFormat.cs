@@ -17,6 +17,10 @@ namespace OpenApiSdkGenerator.Models.Enumerators
         [EnumMember(Value = "uri-reference")]
         UriReference,
         [EnumMember(Value = "date-time")]
-        DateTime
+        DateTime,
+        [EnumMember(Value = "email")]
+        Email,
+        [EnumMember(Value = "binary")]
+        Binary
     }
 }

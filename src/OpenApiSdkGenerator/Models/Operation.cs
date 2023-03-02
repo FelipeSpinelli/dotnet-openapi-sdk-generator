@@ -68,7 +68,7 @@ namespace OpenApiSdkGenerator.Models
         public string GetName() => string.Join("",
             (
                 OperationId ??
-                Tags.FirstOrDefault(x => !x.Equals(nameof(OpenApiSdkGenerator), StringComparison.InvariantCultureIgnoreCase)) ??
+                Tags.FirstOrDefault() ??
                 Regex.Replace($"{HttpMethod}{Path}", VALID_NAME_CHARACTERS_PATTERN, "")
             )
             .Split(' ')
@@ -79,7 +79,8 @@ namespace OpenApiSdkGenerator.Models
             var successResponse = Responses
                 .FirstOrDefault(x => short.TryParse(x.Key, out var statusCode) && statusCode >= 200 && statusCode < 300);
 
-            if (successResponse.Key == ((int)HttpStatusCode.NoContent).ToString())
+            if (successResponse.Key == ((int)HttpStatusCode.NoContent).ToString() || 
+                string.IsNullOrWhiteSpace(successResponse.Key))
             {
                 return "NoContentResponse";
             }
@@ -104,7 +105,11 @@ namespace OpenApiSdkGenerator.Models
         {
             return string.Join(",", Parameters
                 .Where(p => p.In == Enumerators.ParameterLocation.Path)
-                .Select(p => p.ToString().Replace("public", string.Empty).Replace("{ get; set; }", string.Empty).Trim()));
+                .Select(p => p.ToString()
+                    .Replace("public", string.Empty)
+                    .Replace("{ get; set; }", string.Empty)
+                    .Trim()
+                ));
         }
 
         private string GetMethodParametersFromHeaders()
