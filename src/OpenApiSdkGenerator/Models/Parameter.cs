@@ -31,15 +31,14 @@ namespace OpenApiSdkGenerator.Models
 
         public override string ToString()
         {
-            var nameAsPascalCase = Name.ToPascalCase();
             var decorator = In switch
             {
-                ParameterLocation.Query => $"[Query(\"{nameAsPascalCase}\")]\r\n",
-                ParameterLocation.Header => $"[Header(\"{nameAsPascalCase}\")]\r\n",
+                ParameterLocation.Query => $"[Query(\"{Name}\")]\r\n",
+                ParameterLocation.Header => $"[Header(\"{Name}\")]\r\n",
                 _ => string.Empty
             };
 
-            return $"{decorator}public {(Schema != null ? Schema.GetTypeName() : Content.First().Value.GetTypeName())} {nameAsPascalCase} {{ get; set; }}";
+            return $"{decorator}public {(Schema != null ? Schema.GetTypeName() : Content.First().Value.GetTypeName())} {Name} {{ get; set; }}";
         }
 
         public static string GetAsQueryClass(string operationName, IEnumerable<Parameter> parameters)
@@ -51,7 +50,7 @@ namespace OpenApiSdkGenerator.Models
 
             var properties = parameters
                 .Where(p => p.In == ParameterLocation.Query)
-                .Select(p => p.ToString())
+                .Select(p => p.ToString().Replace($" {p.Name} ", $" {p.Name.ToPascalCase()} "))
                 .Distinct()
                 .ToList();
 

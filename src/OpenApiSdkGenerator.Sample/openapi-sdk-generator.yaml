@@ -1,8 +1,8 @@
 ﻿usings:
   - "System"
+defaultOperationAttributes:
 operations:
-  - name: AddPet
-    attributes:
-      - "[Obsolete]"
-  - name: DeletePet
+  - name: ApiHealth
+    ignore: true
+  - name: Ping
     ignore: true

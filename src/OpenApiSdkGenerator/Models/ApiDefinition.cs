@@ -13,10 +13,12 @@ namespace OpenApiSdkGenerator.Models
 {
     public record ApiDefinition
     {
-        private static readonly IDictionary<string, Schema> _globalReferences = new Dictionary<string, Schema>();
-        private static readonly IDictionary<string, string> _queryParamsClass = new Dictionary<string, string>();
-        private static string _namespace;
-        public static SdkOptions? Options { get; private set; }
+        private static ApiDefinition _current = new();
+
+        private readonly IDictionary<string, Schema> _globalReferences = new Dictionary<string, Schema>();
+        private readonly IDictionary<string, string> _queryParamsClass = new Dictionary<string, string>();
+        private string _namespace;
+        public SdkOptions? Options { get; private set; }
 
         [JsonProperty("openapi")]
         public string OpenApiVersion { get; set; } = "3.0.1";
@@ -39,10 +41,10 @@ namespace OpenApiSdkGenerator.Models
             .Select(operation => operation.ApplySdkOptions(Options))
             .Where(operation => operation.ShouldBeGenerated);
 
-        public static void SetNamespace(string @namespace) => _namespace = @namespace;
-        public static string GetNamespace() => _namespace;
+        public void SetNamespace(string @namespace) => _namespace = @namespace;
+        public static string GetNamespace() => _current._namespace;
 
-        public static void LoadApiDefinitionOptions(string rawOptions)
+        public void LoadApiDefinitionOptions(string rawOptions)
         {
             if (string.IsNullOrEmpty(rawOptions))
             {
@@ -109,16 +111,14 @@ namespace OpenApiSdkGenerator.Models
                 }
 
                 context.AddSource($"{queryParamsClassName}.g.cs", SourceText.From(content, Encoding.UTF8));
+                _queryParamsClass.Add(queryParamsClassName, content);
             }
         }
 
-        public static Schema? GetSchemaByReference(string reference) => _globalReferences.ContainsKey(reference ?? string.Empty)
-            ? _globalReferences[reference]
+        public static Schema? GetSchemaByReference(string reference) => _current._globalReferences.ContainsKey(reference ?? string.Empty)
+            ? _current._globalReferences[reference]
             : null;
 
-        public bool OperationMustBeGenerated(string operationName)
-        {
-            throw new NotImplementedException();
-        }
+        public void SetAsCurrent() => _current = this;
     }
 }

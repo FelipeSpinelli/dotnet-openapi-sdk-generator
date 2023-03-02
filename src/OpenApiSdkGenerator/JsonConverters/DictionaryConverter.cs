@@ -10,7 +10,7 @@ namespace OpenApiSdkGenerator.JsonConverters
     public class DictionaryConverter<T> : JsonConverter<IDictionary<string, T>>
     {
         private readonly Dictionary<string, T> _empty = new Dictionary<string, T>(0);
-        private const string VALID_PATH_CHARACTERS_PATTERN = "[^0-9a-zA-Z/]+";
+        private const string VALID_PATH_CHARACTERS_PATTERN = "[^0-9a-zA-Z/{}]+";
 
         public override IDictionary<string, T>? ReadJson(JsonReader reader, Type objectType, IDictionary<string, T>? existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
