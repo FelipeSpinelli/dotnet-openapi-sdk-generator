@@ -139,6 +139,7 @@ namespace {{ namespace }}
 {{ attribute }}
 {{end}}
 [{{ http_method }}("{{ path }}")]
+[AllowAnyStatusCode]
 public Task&lt;Response&lt;{{ response }}&gt;&gt; {{ name }}({{ method_signature }});</value>
   </data>
   <data name="ApiClientType" xml:space="preserve">

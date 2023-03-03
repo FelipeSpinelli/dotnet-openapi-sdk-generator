@@ -88,6 +88,7 @@ namespace OpenApiSdkGenerator {
         ///{{ attribute }}
         ///{{end}}
         ///[{{ http_method }}(&quot;{{ path }}&quot;)]
+        ///[AllowAnyStatusCode]
         ///public Task&lt;Response&lt;{{ response }}&gt;&gt; {{ name }}({{ method_signature }});.
         /// </summary>
         internal static string ApiClientOperation {
