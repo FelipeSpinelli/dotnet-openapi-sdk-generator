@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.Threading;
 
 namespace OpenApiSdkGenerator.Models
 {
@@ -61,7 +60,7 @@ namespace OpenApiSdkGenerator.Models
                 Path,
                 Response = GetSuccessResponseType(),
                 Name = GetName(),
-                MethodSignature = string.Join(",", new[] { GetMethodSignature(), "CancellationToken cancellationToken" }.Where(x=>!string.IsNullOrWhiteSpace(x))),
+                MethodSignature = string.Join(", ", new[] { GetMethodSignature(), "CancellationToken cancellationToken" }.Where(x=>!string.IsNullOrWhiteSpace(x))),
                 Attributes
             });
         }
@@ -106,10 +105,10 @@ namespace OpenApiSdkGenerator.Models
         {
             return string.Join(",", Parameters
                 .Where(p => p.In == Enumerators.ParameterLocation.Path)
-                .Select(p => p.ToString()
+                .Select(p => $"[Path] {p.ToString()
                     .Replace("public", string.Empty)
                     .Replace("{ get; set; }", string.Empty)
-                    .Trim()
+                    .Trim()}"
                 ));
         }
 
