@@ -119,7 +119,7 @@
   </resheader>
   <data name="ApiClientInterface" xml:space="preserve">
     <value>// &lt;auto-generated /&gt;
-using Refit;
+using RestEase;
 {{for using in usings}}
 using {{ using }};
 {{end}}
@@ -138,11 +138,11 @@ namespace {{ namespace }}
 {{ attribute }}
 {{end}}
 [{{ http_method }}("{{ path }}")]
-public Task&lt;ApiResponse&lt;{{ response }}&gt;&gt; {{ name }}({{ method_signature }});</value>
+public Task&lt;Response&lt;{{ response }}&gt;&gt; {{ name }}({{ method_signature }});</value>
   </data>
   <data name="ApiClientType" xml:space="preserve">
     <value>// &lt;auto-generated /&gt;
-using Refit;
+using RestEase;
 namespace {{ namespace }}
 {
     public {{type}} {{ name }}
@@ -150,14 +150,113 @@ namespace {{ namespace }}
 {{ for property in properties }}
         {{ property }}
 {{ end }}
+        {{ to_string }}
     }
 }</value>
   </data>
+  <data name="ApiQueryClassToStringMethod" xml:space="preserve">
+    <value>public override string ToString()
+{
+    return this.GetRawQueryString();
+}</value>
+  </data>
   <data name="NoContentResponse" xml:space="preserve">
-    <value>namespace Refit
+    <value>namespace RestEase
 {
     public class NoContentResponse
     {
+    }
+}</value>
+  </data>
+  <data name="OpenApiSdkGeneratorUtils" xml:space="preserve">
+    <value>using RestEase;
+using System.Collections;
+using System.Text;
+
+namespace {{ namespace }}
+{
+    internal static class OpenApiSdkGeneratorUtils
+    {
+        public static string GetRawQueryString(this object obj)
+        {
+            var type = obj.GetType();
+            var sb = new StringBuilder();
+            var isFirst = true;
+            foreach (var property in type.GetProperties())
+            {
+                var queryAttribute = property.GetCustomAttributes(true)
+                    .OfType&lt;QueryAttribute&gt;().FirstOrDefault();
+
+                if (queryAttribute == null)
+                {
+                    continue;
+                }
+
+                var queryName = queryAttribute.Name ?? property.Name;
+                if (!property.PropertyType.IsEnumerable())
+                {
+                    sb.Append($"{(isFirst ? string.Empty : "&amp;")}{queryName}={property.GetValue(obj)}");
+                    isFirst = false;
+                    continue;
+                }
+
+                if (!property.PropertyType.IsGenericEnumerable())
+                {
+                    var array = property.GetValue(obj) as Array;
+
+                    sb.AppendArray(queryName, array, isFirst);
+                    isFirst = false;
+                    continue;
+                }
+
+                var enumerable = (IEnumerable?)property.GetValue(obj);
+                sb.AppendIEnumerable(queryName, enumerable, isFirst);
+
+                isFirst = false;
+            }
+
+            return sb.ToString();
+        }
+
+        public static bool IsEnumerable(this Type type)
+        {
+            return type.IsGenericEnumerable() || type.IsArray;
+        }
+
+        private static bool IsGenericEnumerable(this Type type)
+        {
+            const string IENUMERABLE = "IEnumerable";
+
+            return type.IsGenericType &amp;&amp;
+                type.GetInterfaces().Any(
+                ti =&gt; (ti == typeof(IEnumerable&lt;&gt;) || ti.Name == IENUMERABLE));
+        }
+
+        private static void AppendArray(this StringBuilder sb, string queryName, Array? array, bool isFirst)
+        {
+            if (array == null)
+            {
+                return;
+            }
+
+            foreach (var item in array)
+            {
+                sb.Append($"{(isFirst ? string.Empty : "&amp;")}{queryName}={item.ToString()}");
+            }
+        }
+
+        private static void AppendIEnumerable(this StringBuilder sb, string queryName, IEnumerable? enumerable, bool isFirst)
+        {
+            if (enumerable == null)
+            {
+                return;
+            }
+
+            foreach (var item in enumerable)
+            {
+                sb.Append($"{(isFirst ? string.Empty : "&amp;")}{queryName}={item.ToString()}");
+            }
+        }
     }
 }</value>
   </data>

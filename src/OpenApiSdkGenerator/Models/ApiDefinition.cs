@@ -82,6 +82,7 @@ namespace OpenApiSdkGenerator.Models
         public void GenerateTypes(GeneratorExecutionContext context)
         {
             context.AddSource("NoContentResponse.g.cs", SourceText.From(CodeBoilerplates.NoContentResponse, Encoding.UTF8));
+            context.AddSource("OpenApiSdkGeneratorUtils.g.cs", SourceText.From(CodeBoilerplates.OpenApiSdkGeneratorUtils.Replace("{{ namespace }}", _namespace), Encoding.UTF8));
 
             foreach (var schema in _globalReferences.Where(x => x.Value.ShouldGenerate()).Select(x => x.Value))
             {

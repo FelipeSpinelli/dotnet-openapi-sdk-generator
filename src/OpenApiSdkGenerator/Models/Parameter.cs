@@ -72,7 +72,8 @@ namespace OpenApiSdkGenerator.Models
                 Namespace = ApiDefinition.GetNamespace(),
                 Name = typeOptions.GetName(),
                 Properties = properties,
-                Type = "class"
+                Type = "class",
+                ToString = CodeBoilerplates.ApiQueryClassToStringMethod
             });
         }
 

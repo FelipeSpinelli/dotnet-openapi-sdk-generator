@@ -130,7 +130,7 @@ namespace OpenApiSdkGenerator.Models
                 return string.Empty;
             }
 
-            return $"[Query] {queryParamsClassName} query";
+            return $"[RawQueryString] {queryParamsClassName} query";
         }
 
         public Operation ApplySdkOptions(SdkOptions? options)

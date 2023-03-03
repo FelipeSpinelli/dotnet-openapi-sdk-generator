@@ -62,7 +62,7 @@ namespace OpenApiSdkGenerator {
         
         /// <summary>
         ///   Looks up a localized string similar to // &lt;auto-generated /&gt;
-        ///using Refit;
+        ///using RestEase;
         ///{{for using in usings}}
         ///using {{ using }};
         ///{{end}}
@@ -87,7 +87,7 @@ namespace OpenApiSdkGenerator {
         ///{{ attribute }}
         ///{{end}}
         ///[{{ http_method }}(&quot;{{ path }}&quot;)]
-        ///public Task&lt;ApiResponse&lt;{{ response }}&gt;&gt; {{ name }}({{ method_signature }});.
+        ///public Task&lt;Response&lt;{{ response }}&gt;&gt; {{ name }}({{ method_signature }});.
         /// </summary>
         internal static string ApiClientOperation {
             get {
@@ -97,7 +97,7 @@ namespace OpenApiSdkGenerator {
         
         /// <summary>
         ///   Looks up a localized string similar to // &lt;auto-generated /&gt;
-        ///using Refit;
+        ///using RestEase;
         ///namespace {{ namespace }}
         ///{
         ///    public {{type}} {{ name }}
@@ -105,6 +105,7 @@ namespace OpenApiSdkGenerator {
         ///{{ for property in properties }}
         ///        {{ property }}
         ///{{ end }}
+        ///        {{ to_string }}
         ///    }
         ///}.
         /// </summary>
@@ -115,7 +116,19 @@ namespace OpenApiSdkGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace Refit
+        ///   Looks up a localized string similar to public override string ToString()
+        ///{
+        ///    return this.GetRawQueryString();
+        ///}.
+        /// </summary>
+        internal static string ApiQueryClassToStringMethod {
+            get {
+                return ResourceManager.GetString("ApiQueryClassToStringMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace RestEase
         ///{
         ///    public class NoContentResponse
         ///    {
@@ -125,6 +138,31 @@ namespace OpenApiSdkGenerator {
         internal static string NoContentResponse {
             get {
                 return ResourceManager.GetString("NoContentResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to using RestEase;
+        ///using System.Collections;
+        ///using System.Text;
+        ///
+        ///namespace {{ namespace }}
+        ///{
+        ///    internal static class OpenApiSdkGeneratorUtils
+        ///    {
+        ///        public static string GetRawQueryString(this object obj)
+        ///        {
+        ///            var type = obj.GetType();
+        ///            var sb = new StringBuilder();
+        ///            var isFirst = true;
+        ///            foreach (var property in type.GetProperties())
+        ///            {
+        ///                var queryAttribute = property.GetCustomAttributes(true)
+        ///                   [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string OpenApiSdkGeneratorUtils {
+            get {
+                return ResourceManager.GetString("OpenApiSdkGeneratorUtils", resourceCulture);
             }
         }
     }
