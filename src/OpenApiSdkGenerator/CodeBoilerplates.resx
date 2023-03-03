@@ -120,6 +120,7 @@
   <data name="ApiClientInterface" xml:space="preserve">
     <value>// &lt;auto-generated /&gt;
 using RestEase;
+using System.Threading;
 {{for using in usings}}
 using {{ using }};
 {{end}}

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace OpenApiSdkGenerator.Models
 {
@@ -60,7 +61,7 @@ namespace OpenApiSdkGenerator.Models
                 Path,
                 Response = GetSuccessResponseType(),
                 Name = GetName(),
-                MethodSignature = GetMethodSignature(),
+                MethodSignature = string.Join(",", new[] { GetMethodSignature(), "CancellationToken cancellationToken" }.Where(x=>!string.IsNullOrWhiteSpace(x))),
                 Attributes
             });
         }

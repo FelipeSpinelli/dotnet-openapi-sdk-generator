@@ -63,6 +63,7 @@ namespace OpenApiSdkGenerator {
         /// <summary>
         ///   Looks up a localized string similar to // &lt;auto-generated /&gt;
         ///using RestEase;
+        ///using System.Threading;
         ///{{for using in usings}}
         ///using {{ using }};
         ///{{end}}
