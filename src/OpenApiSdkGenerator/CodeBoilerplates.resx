@@ -145,7 +145,7 @@ public Task&lt;ApiResponse&lt;{{ response }}&gt;&gt; {{ name }}({{ method_signat
 using Refit;
 namespace {{ namespace }}
 {
-    public class {{ name }}
+    public {{type}} {{ name }}
     {
 {{ for property in properties }}
         {{ property }}

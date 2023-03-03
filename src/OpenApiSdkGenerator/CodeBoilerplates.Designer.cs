@@ -100,7 +100,7 @@ namespace OpenApiSdkGenerator {
         ///using Refit;
         ///namespace {{ namespace }}
         ///{
-        ///    public class {{ name }}
+        ///    public {{type}} {{ name }}
         ///    {
         ///{{ for property in properties }}
         ///        {{ property }}

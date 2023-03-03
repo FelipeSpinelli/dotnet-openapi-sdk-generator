@@ -43,6 +43,13 @@ namespace OpenApiSdkGenerator.Models
 
         public static string GetAsQueryClass(string operationName, IEnumerable<Parameter> parameters)
         {
+            var typeOptions = ApiDefinition.GetTypeOptions(GetAsQueryParamsClassName(operationName));
+
+            if (typeOptions.Ignore)
+            {
+                return string.Empty;
+            }
+
             if (parameters.Any(p => p.In != ParameterLocation.Query))
             {
                 throw new ArgumentException("Query parameters class only accepts parameter which In equals 'query'!");
@@ -63,11 +70,18 @@ namespace OpenApiSdkGenerator.Models
             return template.Render(new
             {
                 Namespace = ApiDefinition.GetNamespace(),
-                Name = GetAsQueryParamsClassName(operationName),
-                Properties = properties
+                Name = typeOptions.GetName(),
+                Properties = properties,
+                Type = "class"
             });
         }
 
-        public static string GetAsQueryParamsClassName(string operationName) => $"{operationName}QueryParams";
+        public static string GetAsQueryParamsClassName(string operationName)
+        {
+            var name = $"{operationName}QueryParams";
+            var typeOptions = ApiDefinition.GetTypeOptions(name);
+
+            return typeOptions.GetName();
+        }
     }
 }

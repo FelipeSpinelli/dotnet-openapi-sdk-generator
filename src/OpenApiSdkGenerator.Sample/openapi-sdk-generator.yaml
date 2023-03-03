@@ -6,3 +6,7 @@ operations:
     ignore: true
   - name: Ping
     ignore: true
+types:
+  - name: NewPet
+    replacementName: CreatePetRequest
+    ignore: false

@@ -20,6 +20,9 @@ namespace OpenApiSdkGenerator.Models
         [JsonProperty("format")]
         public DataFormat? Format { get; set; }
 
+        [JsonProperty("enum")]
+        public string[] EnumValues { get; set; } = Array.Empty<string>();
+
         [JsonProperty("nullable")]
         public bool Nullable { get; set; }
 
@@ -36,13 +39,18 @@ namespace OpenApiSdkGenerator.Models
         [JsonProperty("items")]
         public Schema? Items { get; set; }
 
-        public string Name { get; private set; }
-
-        public string SetName(string name) => Name = name;
+        public string Name { get; set; } = null!;
+        public string OriginalName { get; set; } = null!;
 
         public string? GetTypeName()
         {
             const string OBJECT_SCHEMA_NAME = "object";
+
+            if (EnumValues.Any())
+            {
+                return $"enum{(Nullable ? "?" : string.Empty)}";
+            }
+
             var name = (Type, Format) switch
             {
                 (DataType.Reference, _) => Schema.GetByReference(Reference)?.Name ?? OBJECT_SCHEMA_NAME,
@@ -63,6 +71,13 @@ namespace OpenApiSdkGenerator.Models
 
         public override string ToString()
         {
+            var typeOptions = ApiDefinition.GetTypeOptions(OriginalName);
+
+            if (typeOptions.Ignore)
+            {
+                return string.Empty;
+            }
+
             var properties = GetProperties()
                 .Concat(AllOf.SelectMany(x => x.GetProperties()))
                 .Distinct()
@@ -72,8 +87,9 @@ namespace OpenApiSdkGenerator.Models
             return template.Render(new
             {
                 Namespace = ApiDefinition.GetNamespace(),
-                Name,
-                Properties = properties
+                Name = typeOptions.GetName(),
+                Properties = properties,
+                Type = EnumValues.Any() ? "enum" : "class"
             });
         }
 
@@ -84,10 +100,17 @@ namespace OpenApiSdkGenerator.Models
                 return Schema.GetByReference(Reference)?.GetProperties() ?? Array.Empty<string>();
             }
 
+            if (EnumValues.Any())
+            {
+                return EnumValues.Select(x => $"{x},").ToArray();
+            }
+
             return Properties
                 .Select(x => $"public {x.Value.GetTypeName()} {x.Key.ToPascalCase()} {{ get; set; }}")
                 .ToArray();
         }
+
+        public bool ShouldGenerate() => !ApiDefinition.GetTypeOptions(OriginalName).Ignore;
 
         public static Schema? GetByReference(string reference) => ApiDefinition.GetSchemaByReference(reference);
     }

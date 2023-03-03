@@ -73,8 +73,9 @@ namespace OpenApiSdkGenerator.Models
 
             foreach (var schema in Components.Schemas)
             {
-                schema.Value.SetName(schema.Key);
-                _globalReferences.Add($"#/components/schemas/{schema.Key}", schema.Value);
+                var typeOptions = GetTypeOptions(schema.Key);
+                var newSchema = schema.Value with { Name = typeOptions.GetName(), OriginalName = typeOptions.Name };
+                _globalReferences.Add($"#/components/schemas/{schema.Key}", newSchema);
             }
         }
 
@@ -82,7 +83,7 @@ namespace OpenApiSdkGenerator.Models
         {
             context.AddSource("NoContentResponse.g.cs", SourceText.From(CodeBoilerplates.NoContentResponse, Encoding.UTF8));
 
-            foreach (var schema in _globalReferences.Select(x => x.Value))
+            foreach (var schema in _globalReferences.Where(x => x.Value.ShouldGenerate()).Select(x => x.Value))
             {
                 context.AddSource($"{schema.Name}.g.cs", SourceText.From(schema.ToString(), Encoding.UTF8));
             }
@@ -115,10 +116,15 @@ namespace OpenApiSdkGenerator.Models
             }
         }
 
+        public void SetAsCurrent() => _current = this;
+
         public static Schema? GetSchemaByReference(string reference) => _current._globalReferences.ContainsKey(reference ?? string.Empty)
             ? _current._globalReferences[reference]
             : null;
 
-        public void SetAsCurrent() => _current = this;
+        public static SdkTypeOptions GetTypeOptions(string typeName)
+        {
+            return (_current.Options ?? new SdkOptions()).GetTypeOptions(typeName);
+        }
     }
 }
