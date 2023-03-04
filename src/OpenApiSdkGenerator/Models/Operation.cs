@@ -105,11 +105,7 @@ namespace OpenApiSdkGenerator.Models
         {
             return string.Join(",", Parameters
                 .Where(p => p.In == Enumerators.ParameterLocation.Path)
-                .Select(p => $"[Path] {p.ToString()
-                    .Replace("public", string.Empty)
-                    .Replace("{ get; set; }", string.Empty)
-                    .Trim()}"
-                ));
+                .Select(p => $"[Path] {p.ToString().Replace("public", string.Empty).Replace("{ get; set; }", string.Empty).Trim()}"));
         }
 
         private string GetMethodParametersFromHeaders()
