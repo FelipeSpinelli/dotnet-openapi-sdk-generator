@@ -17,7 +17,7 @@ namespace OpenApiSdkGenerator.Models
 
         private readonly IDictionary<string, Schema> _globalReferences = new Dictionary<string, Schema>();
         private readonly IDictionary<string, string> _queryParamsClass = new Dictionary<string, string>();
-        private string _namespace;
+        private string _namespace = string.Empty;
         public SdkOptions? Options { get; private set; }
 
         [JsonProperty("openapi")]
@@ -125,7 +125,16 @@ namespace OpenApiSdkGenerator.Models
 
         public static SdkTypeOptions GetTypeOptions(string typeName)
         {
-            return (_current.Options ?? new SdkOptions()).GetTypeOptions(typeName);
+            return GetOptions().GetTypeOptions(typeName);
         }
+
+        public static string GetApiClientName()
+        {
+            return string.IsNullOrWhiteSpace(GetOptions().ApiClientName)
+                ? "IApiClient"
+                : GetOptions().ApiClientName;
+        }
+
+        private static SdkOptions GetOptions() => _current.Options ?? new SdkOptions();
     }
 }

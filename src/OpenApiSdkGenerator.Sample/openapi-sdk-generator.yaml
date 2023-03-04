@@ -1,4 +1,5 @@
-﻿usings:
+﻿apiClientName: IPetApi
+usings:
   - "System"
 defaultOperationAttributes:
 operations:

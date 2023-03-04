@@ -11,6 +11,7 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 		<CompilerGeneratedFilesOutputPath>obj</CompilerGeneratedFilesOutputPath>
+		<Version>9.9.2</Version>
 
 		<PackageId>OpenApiSdkGenerator</PackageId>
 		<Authors>Felipe Spinelli</Authors>

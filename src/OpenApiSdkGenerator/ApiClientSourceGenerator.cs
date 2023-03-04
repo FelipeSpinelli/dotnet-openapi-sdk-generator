@@ -16,12 +16,17 @@ namespace OpenApiSdkGenerator
     [Generator]
     public class ApiClientSourceGenerator : ISourceGenerator
     {
-        private static readonly DiagnosticDescriptor InvalidJsonError = new DiagnosticDescriptor(id: "OPENAPISDKGEN001",
-                                                                                              title: "Couldn't parse json file",
-                                                                                              messageFormat: "Couldn't parse json file '{0}' Reason[{1}]",
-                                                                                              category: "OpenApiSdkGenerator",
-                                                                                              DiagnosticSeverity.Error,
-                                                                                              isEnabledByDefault: true);
+        const string SDK_DEFINITIONS_FILENAME = "openapi-sdk-generator.yaml";
+
+        private static readonly DiagnosticDescriptor InvalidJsonError = new(id: "OPENAPISDKGEN001",
+                                                                            title: "Couldn't parse json file",
+                                                                            messageFormat: "Couldn't parse json file '{0}' Reason[{1}]",
+                                                                            category: "OpenApiSdkGenerator",
+                                                                            DiagnosticSeverity.Warning,
+                                                                            isEnabledByDefault: true);
+        private ApiDefinition _definition = new();
+        private string _openApiFileName = string.Empty;
+
         public void Initialize(GeneratorInitializationContext context)
         {
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
@@ -32,63 +37,63 @@ namespace OpenApiSdkGenerator
                 MissingMemberHandling = MissingMemberHandling.Ignore,
             };
 
-//#if DEBUG
-//            Debugger.Launch();
-//#endif
+            //#if DEBUG
+            //            Debugger.Launch();
+            //#endif
         }
 
         public void Execute(GeneratorExecutionContext context)
         {
-            const string SDK_DEFINITIONS_FILENAME = "openapi-sdk-generator.yaml";
-
-            var openapiFileName = string.Empty;
             try
             {
-                var @namespace = context.Compilation?.AssemblyName ?? "OpenApiSdkGenerator";
-
-                var openapiFile = context.AdditionalFiles
-                    .FirstOrDefault(f => !f.Path.EndsWith(SDK_DEFINITIONS_FILENAME, StringComparison.InvariantCultureIgnoreCase));
-
-                if (openapiFile == null)
-                {
-                    return;
-                }
-
-                openapiFileName = openapiFile.Path;
-
-                var apiClientNameDefined = context
-                    .AnalyzerConfigOptions
-                    .GetOptions(openapiFile)
-                    .TryGetValue("build_metadata.AdditionalFiles.GeneratedApiClientName", out var generatedApiClientName);
-
-                var jsonContent = openapiFile.GetText(context.CancellationToken)?.ToString();
-
-                if (jsonContent == null)
-                {
-                    return;
-                }
-
-                var apiDefinition = JsonConvert.DeserializeObject<ApiDefinition>(jsonContent.Replace("$ref", "_reference"));
-                if (apiDefinition == null)
-                {
-                    return;
-                }
-
-                apiDefinition.SetNamespace(@namespace);
-                LoadSdkDefinitions(context, SDK_DEFINITIONS_FILENAME, apiDefinition);
-                apiDefinition.SetAsCurrent();
-                apiDefinition.RegisterReferences();
-                apiDefinition.GenerateTypes(context);
-
-                var apiClientName = apiClientNameDefined ? generatedApiClientName : "ApiClient";
-                var content = GetContent(apiClientName, apiDefinition);
-
-                context.AddSource($"{apiClientName}.g.cs", SourceText.From(content, Encoding.UTF8));
+                LoadDefinitions(context);
+                AddApiClientInterfaceSource(context);
             }
             catch (Exception ex)
             {
-                context.ReportDiagnostic(Diagnostic.Create(InvalidJsonError, Location.None, openapiFileName, ex.Message));
+                var errorMessage = $"Error: {ex.Message}\r\nStackTrace: {ex.StackTrace}";
+                context.ReportDiagnostic(Diagnostic.Create(InvalidJsonError, Location.None, _openApiFileName, errorMessage));
             }
+        }
+
+        private void LoadDefinitions(GeneratorExecutionContext context)
+        {
+            var @namespace = context.Compilation?.AssemblyName ?? "OpenApiSdkGenerator";
+
+            var openapiFile = context.AdditionalFiles
+                .FirstOrDefault(f => !f.Path.EndsWith(SDK_DEFINITIONS_FILENAME, StringComparison.InvariantCultureIgnoreCase));
+
+            if (openapiFile == null)
+            {
+                return;
+            }
+
+            _openApiFileName = openapiFile.Path;
+
+            var jsonContent = openapiFile.GetText(context.CancellationToken)?.ToString();
+
+            if (string.IsNullOrEmpty(jsonContent))
+            {
+                return;
+            }
+
+            var apiDefinition = JsonConvert.DeserializeObject<ApiDefinition>(jsonContent!.Replace("$ref", "_reference"));
+            if (apiDefinition == null)
+            {
+                return;
+            }
+
+            apiDefinition.SetNamespace(@namespace);
+            LoadSdkDefinitions(context, SDK_DEFINITIONS_FILENAME, apiDefinition);
+            apiDefinition.SetAsCurrent();
+            apiDefinition.RegisterReferences();
+            apiDefinition.GenerateTypes(context);
+        }
+
+        private void AddApiClientInterfaceSource(GeneratorExecutionContext context)
+        {
+            var content = GetContent();
+            context.AddSource($"{ApiDefinition.GetApiClientName()}.g.cs", SourceText.From(content, Encoding.UTF8));
         }
 
         private static void LoadSdkDefinitions(GeneratorExecutionContext context, string SDK_DEFINITIONS_FILENAME, ApiDefinition apiDefinition)
@@ -100,16 +105,16 @@ namespace OpenApiSdkGenerator
             apiDefinition.LoadApiDefinitionOptions(sdkDefinitionsText);
         }
 
-        private string GetContent(string apiClientName, ApiDefinition apiDefinition)
+        private string GetContent()
         {
             var template = Template.Parse(CodeBoilerplates.ApiClientInterface);
             return template.Render(new
             {
-                Usings = apiDefinition.Options?.Usings ?? Array.Empty<string>(),
+                Usings = _definition.Options?.Usings ?? Array.Empty<string>(),
                 Namespace = ApiDefinition.GetNamespace(),
-                ApiClientName = apiClientName,
-                ApiDefinition = apiDefinition,
-                apiDefinition.Operations
+                ApiClientName = ApiDefinition.GetApiClientName(),
+                ApiDefinition = _definition,
+                _definition.Operations
             });
         }
     }

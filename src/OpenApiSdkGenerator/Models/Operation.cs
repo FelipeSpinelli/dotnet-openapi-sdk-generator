@@ -13,6 +13,7 @@ namespace OpenApiSdkGenerator.Models
     public record Operation
     {
         private const string VALID_NAME_CHARACTERS_PATTERN = "[^0-9a-zA-Z]+";
+        private const string CANCELLATIONTOKEN_PARAMETER_DECLARATION = "CancellationToken cancellationToken";
 
         [JsonIgnore]
         public string Path { get; set; } = null!;
@@ -60,7 +61,7 @@ namespace OpenApiSdkGenerator.Models
                 Path,
                 Response = GetSuccessResponseType(),
                 Name = GetName(),
-                MethodSignature = string.Join(", ", new[] { GetMethodSignature(), "CancellationToken cancellationToken" }.Where(x=>!string.IsNullOrWhiteSpace(x))),
+                MethodSignature = string.Join(", ", new[] { GetMethodSignature(), CANCELLATIONTOKEN_PARAMETER_DECLARATION }.Where(x=>!string.IsNullOrWhiteSpace(x))),
                 Attributes
             });
         }
@@ -131,12 +132,16 @@ namespace OpenApiSdkGenerator.Models
 
         public Operation ApplySdkOptions(SdkOptions? options)
         {
-            if (options == null)
+            if (options == null || options.Operations == null)
             {
                 return this;
             }
 
             var sdkOperationOptions = options.Operations.FirstOrDefault(x => x.Name.Equals(GetName()));
+            if (sdkOperationOptions == null)
+            {
+                return this;
+            }
 
             return this with
             {

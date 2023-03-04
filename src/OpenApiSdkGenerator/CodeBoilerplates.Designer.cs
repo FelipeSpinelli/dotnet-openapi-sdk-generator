@@ -62,6 +62,7 @@ namespace OpenApiSdkGenerator {
         
         /// <summary>
         ///   Looks up a localized string similar to // &lt;auto-generated /&gt;
+        ///#nullable enable
         ///using RestEase;
         ///using System.Threading;
         ///{{for using in usings}}
@@ -75,6 +76,7 @@ namespace OpenApiSdkGenerator {
         ///        {{ operation }}
         ///{{ end }}
         ///    }
+        ///#nullable restore
         ///}.
         /// </summary>
         internal static string ApiClientInterface {
@@ -99,6 +101,7 @@ namespace OpenApiSdkGenerator {
         
         /// <summary>
         ///   Looks up a localized string similar to // &lt;auto-generated /&gt;
+        ///#nullable enable
         ///using RestEase;
         ///namespace {{ namespace }}
         ///{
@@ -109,7 +112,8 @@ namespace OpenApiSdkGenerator {
         ///{{ end }}
         ///        {{ to_string }}
         ///    }
-        ///}.
+        ///}
+        ///#nullable restore.
         /// </summary>
         internal static string ApiClientType {
             get {
@@ -130,12 +134,14 @@ namespace OpenApiSdkGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace RestEase
+        ///   Looks up a localized string similar to #nullable enable
+        ///namespace RestEase
         ///{
         ///    public class NoContentResponse
         ///    {
         ///    }
-        ///}.
+        ///}
+        ///#nullable restore.
         /// </summary>
         internal static string NoContentResponse {
             get {
@@ -144,7 +150,9 @@ namespace OpenApiSdkGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using RestEase;
+        ///   Looks up a localized string similar to //&lt;auto-generated /&gt;
+        ///#nullable enable
+        ///using RestEase;
         ///using System.Collections;
         ///using System.Text;
         ///
@@ -159,8 +167,7 @@ namespace OpenApiSdkGenerator {
         ///            var isFirst = true;
         ///            foreach (var property in type.GetProperties())
         ///            {
-        ///                var queryAttribute = property.GetCustomAttributes(true)
-        ///                   [rest of string was truncated]&quot;;.
+        ///                var queryAttribute = property.GetCu [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string OpenApiSdkGeneratorUtils {
             get {
