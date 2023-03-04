@@ -174,5 +174,28 @@ namespace OpenApiSdkGenerator {
                 return ResourceManager.GetString("OpenApiSdkGeneratorUtils", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // &lt;auto-generated /&gt;
+        ///using Microsoft.Extensions.Configuration;
+        ///using RestEase.HttpClientFactory;
+        ///using System.Diagnostics.CodeAnalysis;
+        ///using {{ namespace }};
+        ///namespace Microsoft.Extensions.DependencyInjection;
+        ///
+        ///[ExcludeFromCodeCoverage]
+        ///public static partial class {{ api_name }}ServiceCollectionExtensions
+        ///{
+        ///    public partial class {{ api_name }}ConnectionSettings
+        ///    {
+        ///        public Uri BaseAddress { get; set; }
+        ///        public TimeSpan Timeout { get; set; }
+        ///        public bool UsesRetry {  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SdkServicesCollectionExtensions {
+            get {
+                return ResourceManager.GetString("SdkServicesCollectionExtensions", resourceCulture);
+            }
+        }
     }
 }

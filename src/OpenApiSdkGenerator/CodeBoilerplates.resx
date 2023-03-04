@@ -271,4 +271,71 @@ namespace {{ namespace }}
 }
 #nullable restore</value>
   </data>
+  <data name="SdkServicesCollectionExtensions" xml:space="preserve">
+    <value>// &lt;auto-generated /&gt;
+using Microsoft.Extensions.Configuration;
+using RestEase.HttpClientFactory;
+using System.Diagnostics.CodeAnalysis;
+using {{ namespace }};
+namespace Microsoft.Extensions.DependencyInjection;
+
+[ExcludeFromCodeCoverage]
+public static partial class {{ api_name }}ServiceCollectionExtensions
+{
+    public partial class {{ api_name }}ConnectionSettings
+    {
+        public Uri BaseAddress { get; set; }
+        public TimeSpan Timeout { get; set; }
+        public bool UsesRetry { get; set; }
+        public int RetryCount { get; set; }
+        public int RetryInterval { get; set; }
+    }
+
+    /// &lt;summary&gt;
+    /// Given a configuration, register the dependency injection, RestEase and Retry Policy.
+    /// &lt;/summary&gt;
+    /// &lt;param name="services"&gt;The &lt;see cref="IServiceCollection"/&gt; to add the service to.&lt;/param&gt;
+    /// &lt;param name="configuration"&gt;&lt;see cref="IConfiguration"/&gt;&lt;/param&gt;
+    /// &lt;param name="apiConnectionSettingsDelegate"&gt;Delegate action to fill basic API connection settings&lt;/param&gt;
+    /// &lt;param name="httpClientBuilderDelegate"&gt;Delegate action to configure IHttpClientBuilder&lt;/param&gt;
+    public static void AddCreditContractApiSdk(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        Func&lt;IConfiguration, {{ api_name }}ConnectionSettings &gt; apiConnectionSettingsDelegate,
+        Action&lt;IHttpClientBuilder, IConfiguration, {{ api_name }}ConnectionSettings &gt;? httpClientBuilderDelegate = null)
+    {
+        var apiConnectionSettings = apiConnectionSettingsDelegate(configuration);
+
+        services
+            .AddSingleton(apiConnectionSettings);
+
+        var httpClientBuilder = services.AddRestEase(apiConnectionSettings);
+
+        if (httpClientBuilder == null)
+        {
+            return;
+        }
+
+        httpClientBuilderDelegate(httpClientBuilder, configuration, apiConnectionSettings);
+    }
+
+    private static IHttpClientBuilder AddRestEase(this IServiceCollection services, {{ api_name }}ConnectionSettings apiConnectionSettings)
+    {
+        var httpClientBuilder = services.AddRestEaseClient&lt;{{ api_client_name }}&gt; (apiConnectionSettings.BaseAddress)
+            .ConfigureHttpClient(client =&gt;
+            {
+                client.BaseAddress = apiConnectionSettings.BaseAddress;
+                client.Timeout = apiConnectionSettings.Timeout;
+            });
+
+        if (!apiConnectionSettings.UsesRetry)
+        {
+            return httpClientBuilder;
+        }
+
+        return httpClientBuilder
+            .AddTransientHttpErrorPolicy(p =&gt; p.WaitAndRetryAsync(apiConnectionSettings.RetryCount, _ =&gt; TimeSpan.FromMilliseconds(apiConnectionSettings.RetryInterval * _)));
+    }
+}</value>
+  </data>
 </root>

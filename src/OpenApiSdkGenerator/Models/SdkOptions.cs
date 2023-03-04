@@ -5,7 +5,8 @@ namespace OpenApiSdkGenerator.Models
 {
     public record SdkOptions
     {
-        public string ApiClientName { get; set; } = "IApiClient";
+        internal const string DEFAULT_APINAME = "MyApi";
+        public string ApiName { get; set; } = DEFAULT_APINAME;
         public string[] Usings { get; set; } = Array.Empty<string>();
         public string[] DefaultOperationAttributes { get; set; } = Array.Empty<string>();
         public SdkOperationOptions[] Operations { get; set; } = Array.Empty<SdkOperationOptions>();

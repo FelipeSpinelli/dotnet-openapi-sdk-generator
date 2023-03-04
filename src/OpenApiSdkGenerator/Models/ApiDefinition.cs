@@ -83,6 +83,16 @@ namespace OpenApiSdkGenerator.Models
         {
             context.AddSource("NoContentResponse.g.cs", SourceText.From(CodeBoilerplates.NoContentResponse, Encoding.UTF8));
             context.AddSource("OpenApiSdkGeneratorUtils.g.cs", SourceText.From(CodeBoilerplates.OpenApiSdkGeneratorUtils.Replace("{{ namespace }}", _namespace), Encoding.UTF8));
+            context.AddSource(
+                $"{ApiDefinition.GetApiName()}ServicesCollectionExtensions.g.cs", 
+                SourceText.From(
+                    CodeBoilerplates.SdkServicesCollectionExtensions
+                        .Replace("{{ namespace }}", _namespace) 
+                        .Replace("{{ api_name }}", GetApiName()) 
+                        .Replace("{{ api_client_name }}", GetApiClientName()), 
+                    Encoding.UTF8
+                )
+            );
 
             foreach (var schema in _globalReferences.Where(x => x.Value.ShouldGenerate()).Select(x => x.Value))
             {
@@ -130,9 +140,14 @@ namespace OpenApiSdkGenerator.Models
 
         public static string GetApiClientName()
         {
-            return string.IsNullOrWhiteSpace(GetOptions().ApiClientName)
-                ? "IApiClient"
-                : GetOptions().ApiClientName;
+            return $"I{GetApiName()}";
+        }
+
+        public static string GetApiName()
+        {
+            return string.IsNullOrWhiteSpace(GetOptions().ApiName)
+                ? SdkOptions.DEFAULT_APINAME
+                : GetOptions().ApiName;
         }
 
         private static SdkOptions GetOptions() => _current.Options ?? new SdkOptions();
