@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<AdditionalFiles Include="openapi.json" GeneratedApiClientName="IPetApi" />
+		<AdditionalFiles Include="openapi.json" />
 		<AdditionalFiles Include="openapi-sdk-generator.yaml" />
 	</ItemGroup>
 

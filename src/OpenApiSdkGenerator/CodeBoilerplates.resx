@@ -133,8 +133,8 @@ namespace {{ namespace }}
         {{ operation }}
 {{ end }}
     }
-#nullable restore
-}</value>
+}
+#nullable restore</value>
   </data>
   <data name="ApiClientOperation" xml:space="preserve">
     <value>{{for attribute in attributes}}
@@ -276,6 +276,7 @@ namespace {{ namespace }}
 using Microsoft.Extensions.Configuration;
 using RestEase.HttpClientFactory;
 using System.Diagnostics.CodeAnalysis;
+using Polly;
 using {{ namespace }};
 namespace Microsoft.Extensions.DependencyInjection;
 

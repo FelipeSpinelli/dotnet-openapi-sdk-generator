@@ -37,9 +37,9 @@ namespace OpenApiSdkGenerator
                 MissingMemberHandling = MissingMemberHandling.Ignore,
             };
 
-            //#if DEBUG
-            //            Debugger.Launch();
-            //#endif
+//#if DEBUG
+//            Debugger.Launch();
+//#endif
         }
 
         public void Execute(GeneratorExecutionContext context)
@@ -77,17 +77,17 @@ namespace OpenApiSdkGenerator
                 return;
             }
 
-            var apiDefinition = JsonConvert.DeserializeObject<ApiDefinition>(jsonContent!.Replace("$ref", "_reference"));
-            if (apiDefinition == null)
+            _definition = JsonConvert.DeserializeObject<ApiDefinition>(jsonContent!.Replace("$ref", "_reference"));
+            if (_definition == null)
             {
                 return;
             }
 
-            apiDefinition.SetNamespace(@namespace);
-            LoadSdkDefinitions(context, SDK_DEFINITIONS_FILENAME, apiDefinition);
-            apiDefinition.SetAsCurrent();
-            apiDefinition.RegisterReferences();
-            apiDefinition.GenerateTypes(context);
+            _definition.SetNamespace(@namespace);
+            LoadSdkDefinitions(context, SDK_DEFINITIONS_FILENAME, _definition);
+            _definition.SetAsCurrent();
+            _definition.RegisterReferences();
+            _definition.GenerateTypes(context);
         }
 
         private void AddApiClientInterfaceSource(GeneratorExecutionContext context)

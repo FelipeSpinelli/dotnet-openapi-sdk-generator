@@ -76,8 +76,8 @@ namespace OpenApiSdkGenerator {
         ///        {{ operation }}
         ///{{ end }}
         ///    }
-        ///#nullable restore
-        ///}.
+        ///}
+        ///#nullable restore.
         /// </summary>
         internal static string ApiClientInterface {
             get {
@@ -180,6 +180,7 @@ namespace OpenApiSdkGenerator {
         ///using Microsoft.Extensions.Configuration;
         ///using RestEase.HttpClientFactory;
         ///using System.Diagnostics.CodeAnalysis;
+        ///using Polly;
         ///using {{ namespace }};
         ///namespace Microsoft.Extensions.DependencyInjection;
         ///
@@ -190,7 +191,7 @@ namespace OpenApiSdkGenerator {
         ///    {
         ///        public Uri BaseAddress { get; set; }
         ///        public TimeSpan Timeout { get; set; }
-        ///        public bool UsesRetry {  [rest of string was truncated]&quot;;.
+        ///        public boo [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SdkServicesCollectionExtensions {
             get {
