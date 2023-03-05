@@ -61,7 +61,7 @@ namespace OpenApiSdkGenerator.Models
                 Path,
                 Response = GetSuccessResponseType(),
                 Name = GetName(),
-                MethodSignature = string.Join(", ", new[] { GetMethodSignature(), CANCELLATIONTOKEN_PARAMETER_DECLARATION }.Where(x=>!string.IsNullOrWhiteSpace(x))),
+                MethodSignature = string.Join(", ", new[] { GetMethodSignature(), CANCELLATIONTOKEN_PARAMETER_DECLARATION }.Where(x => !string.IsNullOrWhiteSpace(x))),
                 Attributes
             });
         }
@@ -80,7 +80,7 @@ namespace OpenApiSdkGenerator.Models
             var successResponse = Responses
                 .FirstOrDefault(x => short.TryParse(x.Key, out var statusCode) && statusCode >= 200 && statusCode < 300);
 
-            if (successResponse.Key == ((int)HttpStatusCode.NoContent).ToString() || 
+            if (successResponse.Key == ((int)HttpStatusCode.NoContent).ToString() ||
                 string.IsNullOrWhiteSpace(successResponse.Key) ||
                 successResponse.Value.Content == null)
             {
@@ -135,13 +135,21 @@ namespace OpenApiSdkGenerator.Models
         {
             if (options == null || options.Operations == null)
             {
-                return this;
+                return this with
+                {
+                    ShouldBeGenerated = true,
+                    Attributes = options?.DefaultOperationAttributes ?? Array.Empty<string>()
+                };
             }
 
             var sdkOperationOptions = options.Operations.FirstOrDefault(x => x.Name.Equals(GetName()));
             if (sdkOperationOptions == null)
             {
-                return this;
+                return this with
+                {
+                    ShouldBeGenerated = true,
+                    Attributes = options?.DefaultOperationAttributes ?? Array.Empty<string>()
+                };
             }
 
             return this with
