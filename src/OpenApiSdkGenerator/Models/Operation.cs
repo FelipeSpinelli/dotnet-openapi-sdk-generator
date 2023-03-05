@@ -81,7 +81,8 @@ namespace OpenApiSdkGenerator.Models
                 .FirstOrDefault(x => short.TryParse(x.Key, out var statusCode) && statusCode >= 200 && statusCode < 300);
 
             if (successResponse.Key == ((int)HttpStatusCode.NoContent).ToString() || 
-                string.IsNullOrWhiteSpace(successResponse.Key))
+                string.IsNullOrWhiteSpace(successResponse.Key) ||
+                successResponse.Value.Content == null)
             {
                 return "NoContentResponse";
             }
