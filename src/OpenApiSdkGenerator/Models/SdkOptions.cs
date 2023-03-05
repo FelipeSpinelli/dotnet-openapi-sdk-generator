@@ -6,6 +6,9 @@ namespace OpenApiSdkGenerator.Models
     public record SdkOptions
     {
         internal const string DEFAULT_APINAME = "MyApi";
+        internal const string DEFAULT_NAMESPACE = "MyApiSdk";
+
+        public string Namespace { get; set; } = DEFAULT_NAMESPACE;
         public string ApiName { get; set; } = DEFAULT_APINAME;
         public string[] Usings { get; set; } = Array.Empty<string>();
         public string[] DefaultOperationAttributes { get; set; } = Array.Empty<string>();
