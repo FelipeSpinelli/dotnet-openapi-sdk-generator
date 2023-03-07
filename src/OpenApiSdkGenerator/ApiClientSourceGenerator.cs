@@ -38,9 +38,9 @@ namespace OpenApiSdkGenerator
                 MissingMemberHandling = MissingMemberHandling.Ignore,
             };
 
-//#if DEBUG
-//            Debugger.Launch();
-//#endif
+#if DEBUG
+            Debugger.Launch();
+#endif
         }
 
         public void Execute(GeneratorExecutionContext context)
@@ -100,7 +100,7 @@ namespace OpenApiSdkGenerator
         private static void LoadSdkDefinitions(GeneratorExecutionContext context, ApiDefinition apiDefinition)
         {
             var sdkDefinitionsText = context.AdditionalFiles
-                .FirstOrDefault(f => f.Path.Equals(SDK_DEFINITIONS_FILENAME, StringComparison.InvariantCultureIgnoreCase))?
+                .FirstOrDefault(f => f.Path.EndsWith(SDK_DEFINITIONS_FILENAME, StringComparison.InvariantCultureIgnoreCase))?
                 .GetText(context.CancellationToken)?.ToString() ?? string.Empty;
 
             apiDefinition.LoadApiDefinitionOptions(sdkDefinitionsText);
