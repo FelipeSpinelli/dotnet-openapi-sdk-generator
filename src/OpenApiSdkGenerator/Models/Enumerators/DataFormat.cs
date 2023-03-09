@@ -12,6 +12,8 @@ namespace OpenApiSdkGenerator.Models.Enumerators
         Float,
         [EnumMember(Value = "double")]
         Double,
+        [EnumMember(Value = "decimal")]
+        Decimal,
         [EnumMember(Value = "password")]
         Password,
         [EnumMember(Value = "uri-reference")]
