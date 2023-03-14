@@ -14,6 +14,8 @@ namespace OpenApiSdkGenerator.Models.Enumerators
         [EnumMember(Value = "array")]
         Array,
         [EnumMember(Value = "object")]
-        Object
+        Object,
+        [EnumMember(Value = "boolean")]
+        Boolean
     }
 }

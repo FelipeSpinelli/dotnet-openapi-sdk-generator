@@ -202,6 +202,13 @@
               "id": {
                 "type": "integer",
                 "format": "int64"
+              },
+              "height": {
+                "type": "number",
+                "format": "decimal"
+              },
+              "vaccinated": {
+                "type": "boolean"
               }
             }
           }

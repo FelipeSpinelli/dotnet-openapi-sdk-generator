@@ -64,6 +64,7 @@ namespace OpenApiSdkGenerator.Models
                 (DataType.String, _) => "string",
                 (DataType.Array, _) => $"{Items?.GetTypeName() ?? OBJECT_SCHEMA_NAME}[]",
                 (DataType.Object, _) => OBJECT_SCHEMA_NAME,
+                (DataType.Boolean, _) => "bool",
                 (_, _) => OBJECT_SCHEMA_NAME,
             };
 
