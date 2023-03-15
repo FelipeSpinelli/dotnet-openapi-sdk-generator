@@ -10,9 +10,15 @@ You must dedicate all efforts to make an amazing API. Generate its SDK is up to 
 ## Usage
 
 ### Installation
-```shell
-dotnet add package OpenApiSdkGenerator --version 0.1.18
-```
+You should install [OpenApiSdkGenerator with NuGet](https://www.nuget.org/packages/OpenApiSdkGenerator):
+
+    Install-Package OpenApiSdkGenerator
+    
+Or via the .NET Core command line interface:
+
+    dotnet add package OpenApiSdkGenerator
+
+Either commands, from Package Manager Console or .NET Core CLI, will download and install OpenApiSdkGenerator and all required dependencies.
 
 ### Configuration
 #### OpenAPI-based json file
