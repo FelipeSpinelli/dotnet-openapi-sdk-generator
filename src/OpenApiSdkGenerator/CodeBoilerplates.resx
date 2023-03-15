@@ -205,8 +205,7 @@ namespace {{ namespace }}
                 var queryName = queryAttribute.Name ?? property.Name;
                 if (!property.PropertyType.IsEnumerable())
                 {
-                    sb.Append($"{(isFirst ? string.Empty : "&amp;")}{queryName}={property.GetValue(obj)}");
-                    isFirst = false;
+                    isFirst = sb.AppendQueryParam(queryName, property.GetValue(obj), isFirst);
                     continue;
                 }
 
@@ -214,15 +213,12 @@ namespace {{ namespace }}
                 {
                     var array = property.GetValue(obj) as Array;
 
-                    sb.AppendArray(queryName, array, isFirst);
-                    isFirst = false;
+                    isFirst = sb.AppendArray(queryName, array, isFirst);
                     continue;
                 }
 
                 var enumerable = (IEnumerable?)property.GetValue(obj);
-                sb.AppendIEnumerable(queryName, enumerable, isFirst);
-
-                isFirst = false;
+                isFirst = sb.AppendIEnumerable(queryName, enumerable, isFirst);
             }
 
             return sb.ToString();
@@ -242,30 +238,47 @@ namespace {{ namespace }}
                 ti =&gt; (ti == typeof(IEnumerable&lt;&gt;) || ti.Name == IENUMERABLE));
         }
 
-        private static void AppendArray(this StringBuilder sb, string queryName, Array? array, bool isFirst)
+        private static bool AppendArray(this StringBuilder sb, string queryName, Array? array, bool isFirst)
         {
             if (array == null)
             {
-                return;
+                return isFirst;
             }
 
             foreach (var item in array)
             {
-                sb.Append($"{(isFirst ? string.Empty : "&amp;")}{queryName}={item.ToString()}");
+                sb.AppendQueryParam(queryName, item, isFirst);
+                isFirst = false;
             }
+
+            return isFirst;
         }
 
-        private static void AppendIEnumerable(this StringBuilder sb, string queryName, IEnumerable? enumerable, bool isFirst)
+        private static bool AppendIEnumerable(this StringBuilder sb, string queryName, IEnumerable? enumerable, bool isFirst)
         {
             if (enumerable == null)
             {
-                return;
+                return isFirst;
             }
 
             foreach (var item in enumerable)
             {
-                sb.Append($"{(isFirst ? string.Empty : "&amp;")}{queryName}={item.ToString()}");
+                sb.AppendQueryParam(queryName, item, isFirst);
+                isFirst = false;
             }
+
+            return isFirst;
+        }
+
+        private static bool AppendQueryParam(this StringBuilder sb, string queryName, object? obj, bool isFirst)
+        {
+            if (obj == null)
+            {
+                return isFirst;
+            }
+
+            sb.Append($"{(isFirst ? string.Empty : "&amp;")}{queryName}={obj.ToString()}");
+            return false;
         }
     }
 }

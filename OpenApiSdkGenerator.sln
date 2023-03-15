@@ -18,6 +18,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\github-actions.yaml = .github\workflows\github-actions.yaml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{63A634C5-8015-486B-B79D-CB1FC7C5AFF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenApiSdkGenerator.UnitTests", "tests\OpenApiSdkGenerator.UnitTests\OpenApiSdkGenerator.UnitTests.csproj", "{E3F8EB37-0858-4970-B987-ED73B44B969F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +36,10 @@ Global
 		{AB708FAB-42B1-45BA-BDE0-3165FEC8F07B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB708FAB-42B1-45BA-BDE0-3165FEC8F07B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB708FAB-42B1-45BA-BDE0-3165FEC8F07B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3F8EB37-0858-4970-B987-ED73B44B969F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3F8EB37-0858-4970-B987-ED73B44B969F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3F8EB37-0858-4970-B987-ED73B44B969F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3F8EB37-0858-4970-B987-ED73B44B969F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +49,7 @@ Global
 		{AB708FAB-42B1-45BA-BDE0-3165FEC8F07B} = {F9F28E2A-B875-4884-9C66-28DFA9EB9170}
 		{EDB3299F-3BEE-452D-8230-991BAF6182E4} = {398FCF80-B563-4C37-A5A0-4BCCFE21BDB6}
 		{6A20737F-6929-43EF-B941-8093F4F199E7} = {EDB3299F-3BEE-452D-8230-991BAF6182E4}
+		{E3F8EB37-0858-4970-B987-ED73B44B969F} = {63A634C5-8015-486B-B79D-CB1FC7C5AFF8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC9E71A3-D10A-495C-AA3D-4363E88CDF38}
