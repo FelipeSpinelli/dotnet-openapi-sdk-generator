@@ -15,7 +15,7 @@ dotnet add package OpenApiSdkGenerator --version 0.1.18
 ```
 
 ### Configuration
-#### OpenAPI-base json file
+#### OpenAPI-based json file
 Once you'd installed the **OpenApiSdkGenerator** package, you need to create a file, inside your SDK project. This file name MUST ends with `openapi.json`.
 This file must contains your OpenAPI-base definition (Swagger file). Something like the example below:
 ```json
