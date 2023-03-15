@@ -305,8 +305,8 @@ Let's explain it detailed the above structure:
 After configure the two files, you need to make them visible to **OpenApiSdkGenerator**. You just simply need to add the above section into your `.csproj` file:
 ```xml
 <ItemGroup>
-		<AdditionalFiles Include="openapi.json" />
-		<AdditionalFiles Include="openapi-sdk-generator.yaml" />
+  <AdditionalFiles Include="openapi.json" />
+  <AdditionalFiles Include="openapi-sdk-generator.yaml" />
 </ItemGroup>
 ```
 *Its assuming your OpenApi specification file is named as `openapi.json`*
