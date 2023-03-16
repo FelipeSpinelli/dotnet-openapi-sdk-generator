@@ -326,4 +326,5 @@ Now every time you update your OpenAPI specification file and rebuild your solut
 
 ## References
 https://github.com/amis92/csharp-source-generators
+
 https://github.com/ByronMayne/SourceGenerator.Foundations
