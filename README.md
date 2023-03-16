@@ -324,3 +324,6 @@ Now every time you update your OpenAPI specification file and rebuild your solut
 ![image](https://user-images.githubusercontent.com/8043092/225466797-495e1aa9-67d9-4842-bbd0-6f1c7e2cca88.png)
 ![image](https://user-images.githubusercontent.com/8043092/225466893-63d54800-9a95-419b-9dc4-bb115900137e.png)
 
+## References
+https://github.com/amis92/csharp-source-generators
+https://github.com/ByronMayne/SourceGenerator.Foundations
