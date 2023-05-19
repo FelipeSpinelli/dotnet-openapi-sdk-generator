@@ -312,7 +312,7 @@ public static partial class {{ api_name }}ServiceCollectionExtensions
     /// &lt;param name="configuration"&gt;&lt;see cref="IConfiguration"/&gt;&lt;/param&gt;
     /// &lt;param name="apiConnectionSettingsDelegate"&gt;Delegate action to fill basic API connection settings&lt;/param&gt;
     /// &lt;param name="httpClientBuilderDelegate"&gt;Delegate action to configure IHttpClientBuilder&lt;/param&gt;
-    public static void AddCreditContractApiSdk(
+    public static void Add{{ api_name }}Sdk(
         this IServiceCollection services,
         IConfiguration configuration,
         Func&lt;IConfiguration, {{ api_name }}ConnectionSettings &gt; apiConnectionSettingsDelegate,
