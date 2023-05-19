@@ -38,7 +38,7 @@ namespace OpenApiSdkGenerator.Models
                 _ => string.Empty
             };
 
-            return $"{decorator}public {(Schema != null ? Schema.GetTypeName() : Content.First().Value.GetTypeName())} {Name} {{ get; set; }}";
+            return $"{decorator}public {(Schema != null ? Schema.GetTypeName() : Content.First().Value.GetTypeName())} {Name.Sanitize()} {{ get; set; }}";
         }
 
         public static string GetAsQueryClass(string operationName, IEnumerable<Parameter> parameters)
@@ -57,7 +57,7 @@ namespace OpenApiSdkGenerator.Models
 
             var properties = parameters
                 .Where(p => p.In == ParameterLocation.Query)
-                .Select(p => p.ToString().Replace($" {p.Name} ", $" {p.Name.ToPascalCase()} "))
+                .Select(p => p.ToString().Replace($" {p.Name.Sanitize()} ", $" {p.Name.Sanitize().ToPascalCase()} "))
                 .Distinct()
                 .ToList();
 

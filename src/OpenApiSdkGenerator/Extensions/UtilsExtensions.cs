@@ -1,10 +1,37 @@
 ﻿using System;
 using System.Buffers;
+using System.Linq;
 
 namespace OpenApiSdkGenerator.Extensions
 {
     public static class UtilsExtensions
     {
+        public static string Sanitize(this string value)
+        {
+            var invalidChars = "@~`!#$%^&()=+';:\"\\/?>.<,]".ToCharArray();
+
+            var buffer = ArrayPool<char>.Shared.Rent(value.Length * 2);
+            var valueAsSpan = value.AsSpan();
+            var bufferIndex = 0;
+
+            for (int i = 0; i < valueAsSpan.Length; i++)
+            {
+                if (!invalidChars.Contains(valueAsSpan[i]))
+                {
+                    buffer[bufferIndex++] = valueAsSpan[i];
+                    continue;
+                }
+
+                buffer[bufferIndex++] = '_';
+                buffer[bufferIndex++] = '_';
+            }
+
+            var sanitizedValue = string.Join(string.Empty, buffer).Substring(0, bufferIndex);
+            ArrayPool<char>.Shared.Return(buffer, true);
+
+            return sanitizedValue;
+        }
+
         public static string ToPascalCase(this string value)
         {
             var buffer = ArrayPool<char>.Shared.Rent(value.Length * 2);

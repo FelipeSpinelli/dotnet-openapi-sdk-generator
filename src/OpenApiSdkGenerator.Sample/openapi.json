@@ -48,6 +48,26 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "created.from",
+            "in": "query",
+            "description": "creation min date to filter by",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "created.to",
+            "in": "query",
+            "description": "creation max date to filter by",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
           }
         ],
         "responses": {

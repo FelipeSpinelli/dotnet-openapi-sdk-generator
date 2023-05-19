@@ -38,9 +38,9 @@ namespace OpenApiSdkGenerator
                 MissingMemberHandling = MissingMemberHandling.Ignore,
             };
 
-#if DEBUG
-            Debugger.Launch();
-#endif
+//#if DEBUG
+//            Debugger.Launch();
+//#endif
         }
 
         public void Execute(GeneratorExecutionContext context)
