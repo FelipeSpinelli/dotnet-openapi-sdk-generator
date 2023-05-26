@@ -11,6 +11,7 @@ namespace OpenApiSdkGenerator.Models
         public string[] DefaultOperationAttributes { get; set; } = Array.Empty<string>();
         public SdkOperationOptions[] Operations { get; set; } = Array.Empty<SdkOperationOptions>();
         public SdkTypeOptions[] Types { get; set; } = Array.Empty<SdkTypeOptions>();
+        public bool SerializeQueryParamsAsRawString { get; set; }
 
         public bool ShouldGenerate(Operation operation)
         {
@@ -29,6 +30,13 @@ namespace OpenApiSdkGenerator.Models
             return typeOptions == null
                 ? new SdkTypeOptions { Name = typeName }
                 : typeOptions;
+        }
+
+        public string GetQueryAttribute()
+        {
+            return SerializeQueryParamsAsRawString 
+                ? "[RawQueryString]"
+                : "[Query(QuerySerializationMethod.Serialized)]";
         }
     }
 }

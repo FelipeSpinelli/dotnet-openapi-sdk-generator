@@ -150,6 +150,6 @@ namespace OpenApiSdkGenerator.Models
                 : GetOptions().ApiName;
         }
 
-        private static SdkOptions GetOptions() => _current.Options ?? new SdkOptions();
+        public static SdkOptions GetOptions() => _current.Options ?? new SdkOptions();
     }
 }

@@ -1,4 +1,5 @@
 using OpenApiSdkGenerator.Sample;
+using System.Globalization;
 
 namespace OpenApiSdkGenerator.UnitTests
 {

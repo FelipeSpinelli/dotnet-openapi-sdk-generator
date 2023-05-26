@@ -127,8 +127,8 @@ namespace OpenApiSdkGenerator.Models
             {
                 return string.Empty;
             }
-
-            return $"[RawQueryString] {queryParamsClassName} query";
+            
+            return $"{ApiDefinition.GetOptions().GetQueryAttribute()} {queryParamsClassName} query";
         }
 
         public Operation ApplySdkOptions(SdkOptions? options)
