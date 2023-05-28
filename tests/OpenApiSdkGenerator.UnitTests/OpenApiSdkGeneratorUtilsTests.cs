@@ -1,22 +1,36 @@
 using OpenApiSdkGenerator.Sample;
-using System.Globalization;
+using RestEase;
 
-namespace OpenApiSdkGenerator.UnitTests
+namespace OpenApiSdkGenerator.UnitTests;
+
+public class OpenApiSdkGeneratorRequestTests
 {
-    public class OpenApiSdkGeneratorUtilsTests
+    [Fact]
+    public async Task X()
     {
-        [Fact]
-        public void GetRawString_GivenAObject_ShouldGenerateAsExpected()
+        var client = new RestClient("http://localhost", RequestModifier).For<IPetApi>();
+        var pets = client.FindPets(new FindPetsQueryParams { CreatedTo = DateTime.UtcNow }, CancellationToken.None);
+
+    }
+
+    private async Task RequestModifier(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        var requestString = await request?.Content?.ReadAsStringAsync(cancellationToken) ?? string.Empty;
+    }
+}
+public class OpenApiSdkGeneratorUtilsTests
+{
+    [Fact]
+    public void GetRawString_GivenAObject_ShouldGenerateAsExpected()
+    {
+        var queryParams = new FindPetsQueryParams
         {
-            var queryParams = new OpenApiSdkGenerator.Sample.FindPetsQueryParams
-            {
-                Tags = new string[] { "abc", "def" },
-                Limit = 10                
-            };
+            Tags = new string[] { "abc", "def" },
+            Limit = 10                
+        };
 
-            var rawQuery = queryParams.GetRawQueryString();
+        var rawQuery = queryParams.GetRawQueryString();
 
-            Assert.Equal(rawQuery, "tags=abc&tags=def&limit=10&created.from=01/01/0001 00:00:00&created.to=01/01/0001 00:00:00");
-        }
+        Assert.Equal(rawQuery, "tags=abc&tags=def&limit=10&created.from=01/01/0001 00:00:00&created.to=01/01/0001 00:00:00");
     }
 }
