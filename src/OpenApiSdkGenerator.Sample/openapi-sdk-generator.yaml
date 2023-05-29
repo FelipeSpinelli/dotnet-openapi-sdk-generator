@@ -11,4 +11,4 @@ types:
   - name: NewPet
     replacementName: CreatePetRequest
     ignore: false
-serializeQueryParamsAsRawString: false
+serializeQueryParamsAsRawString: true
