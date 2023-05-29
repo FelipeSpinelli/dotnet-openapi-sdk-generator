@@ -69,6 +69,7 @@ namespace OpenApiSdkGenerator.Models
             var template = Template.Parse(CodeBoilerplates.ApiClientType);
             return template.Render(new
             {
+                NewtonsoftUsing = ApiDefinition.GetOptions().SerializeQueryParamsAsRawString ? string.Empty : "using Newtonsoft.Json;",
                 Namespace = ApiDefinition.GetNamespace(),
                 Name = typeOptions.GetName(),
                 Properties = properties,

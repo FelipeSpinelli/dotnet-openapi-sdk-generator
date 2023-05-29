@@ -148,6 +148,7 @@ public Task&lt;Response&lt;{{ response }}&gt;&gt; {{ name }}({{ method_signature
     <value>// &lt;auto-generated /&gt;
 #nullable enable
 using RestEase;
+{{ newtonsoft_using }}
 namespace {{ namespace }}
 {
     public {{type}} {{ name }}

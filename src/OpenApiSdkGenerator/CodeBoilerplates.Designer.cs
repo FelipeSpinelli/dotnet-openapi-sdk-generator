@@ -103,6 +103,7 @@ namespace OpenApiSdkGenerator {
         ///   Looks up a localized string similar to // &lt;auto-generated /&gt;
         ///#nullable enable
         ///using RestEase;
+        ///{{ newtonsoft_using }}
         ///namespace {{ namespace }}
         ///{
         ///    public {{type}} {{ name }}

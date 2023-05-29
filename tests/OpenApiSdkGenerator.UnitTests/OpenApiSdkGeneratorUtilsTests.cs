@@ -1,23 +1,7 @@
 using OpenApiSdkGenerator.Sample;
-using RestEase;
 
 namespace OpenApiSdkGenerator.UnitTests;
 
-public class OpenApiSdkGeneratorRequestTests
-{
-    [Fact]
-    public async Task X()
-    {
-        var client = new RestClient("http://localhost", RequestModifier).For<IPetApi>();
-        var pets = client.FindPets(new FindPetsQueryParams { CreatedTo = DateTime.UtcNow }, CancellationToken.None);
-
-    }
-
-    private async Task RequestModifier(HttpRequestMessage request, CancellationToken cancellationToken)
-    {
-        var requestString = await request?.Content?.ReadAsStringAsync(cancellationToken) ?? string.Empty;
-    }
-}
 public class OpenApiSdkGeneratorUtilsTests
 {
     [Fact]
