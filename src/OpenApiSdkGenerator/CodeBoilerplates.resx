@@ -278,7 +278,15 @@ namespace {{ namespace }}
                 return isFirst;
             }
 
-            sb.Append($"{(isFirst ? string.Empty : "&amp;")}{queryName}={obj.ToString()}");
+            var queryType = obj.GetType().Name;
+
+            var queryValue = queryType switch
+            {
+                {{ types_formatting_list }}
+                _ =&gt; obj.ToString()
+            };
+
+            sb.Append($"{(isFirst ? string.Empty : "&amp;")}{queryName}={queryValue}");
             return false;
         }
     }

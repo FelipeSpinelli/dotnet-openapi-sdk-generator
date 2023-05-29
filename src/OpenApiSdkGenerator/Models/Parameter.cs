@@ -33,7 +33,7 @@ namespace OpenApiSdkGenerator.Models
         {
             var decorator = In switch
             {
-                ParameterLocation.Query => $"[{(ApiDefinition.GetOptions().SerializeQueryParamsAsRawString ? "Query" : "JsonProperty")}(\"{Name}\")]\r\n",
+                ParameterLocation.Query => $"[{(ApiDefinition.GetOptions().QuerySerialization.SerializeAsRawString ? "Query" : "JsonProperty")}(\"{Name}\")]\r\n",
                 ParameterLocation.Header => $"[Header(\"{Name}\")]\r\n",
                 _ => string.Empty
             };
@@ -69,7 +69,7 @@ namespace OpenApiSdkGenerator.Models
             var template = Template.Parse(CodeBoilerplates.ApiClientType);
             return template.Render(new
             {
-                NewtonsoftUsing = ApiDefinition.GetOptions().SerializeQueryParamsAsRawString ? string.Empty : "using Newtonsoft.Json;",
+                NewtonsoftUsing = ApiDefinition.GetOptions().QuerySerialization.SerializeAsRawString ? string.Empty : "using Newtonsoft.Json;",
                 Namespace = ApiDefinition.GetNamespace(),
                 Name = typeOptions.GetName(),
                 Properties = properties,

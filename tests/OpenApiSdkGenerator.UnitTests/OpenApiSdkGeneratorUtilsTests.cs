@@ -15,6 +15,6 @@ public class OpenApiSdkGeneratorUtilsTests
 
         var rawQuery = queryParams.GetRawQueryString();
 
-        Assert.Equal(rawQuery, "tags=abc&tags=def&limit=10&created.from=01/01/0001 00:00:00&created.to=01/01/0001 00:00:00");
+        Assert.Equal(rawQuery, "tags=abc&tags=def&limit=10&created.from=0001-01-01 00:00:00.000&created.to=0001-01-01 00:00:00.000");
     }
 }

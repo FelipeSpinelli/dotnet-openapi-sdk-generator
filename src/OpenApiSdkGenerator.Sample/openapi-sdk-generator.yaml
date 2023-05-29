@@ -11,4 +11,7 @@ types:
   - name: NewPet
     replacementName: CreatePetRequest
     ignore: false
-serializeQueryParamsAsRawString: true
+querySerialization:
+  serializeAsRawString: true
+  typesFormatting:
+    DateTime: "yyyy-MM-dd HH:mm:ss.fffK"

@@ -82,7 +82,15 @@ namespace OpenApiSdkGenerator.Models
         public void GenerateTypes(GeneratorExecutionContext context)
         {
             context.AddSource("NoContentResponse.g.cs", SourceText.From(CodeBoilerplates.NoContentResponse, Encoding.UTF8));
-            context.AddSource("OpenApiSdkGeneratorUtils.g.cs", SourceText.From(CodeBoilerplates.OpenApiSdkGeneratorUtils.Replace("{{ namespace }}", _namespace), Encoding.UTF8));
+            context.AddSource(
+                "OpenApiSdkGeneratorUtils.g.cs", 
+                SourceText.From(
+                    CodeBoilerplates.OpenApiSdkGeneratorUtils
+                        .Replace("{{ namespace }}", _namespace)
+                        .Replace("{{ types_formatting_list }}", GetOptions().QuerySerialization.ToString()),
+                    Encoding.UTF8
+                )
+            );
             context.AddSource(
                 $"{ApiDefinition.GetApiName()}ServicesCollectionExtensions.g.cs", 
                 SourceText.From(
