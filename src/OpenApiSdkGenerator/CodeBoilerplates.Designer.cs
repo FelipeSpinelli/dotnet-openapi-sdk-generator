@@ -70,7 +70,7 @@ namespace OpenApiSdkGenerator {
         ///{{end}}
         ///namespace {{ namespace }}
         ///{
-        ///    public interface {{ api_client_name }}
+        ///    public partial interface {{ api_client_name }}
         ///    {
         ///{{ for operation in operations }}
         ///        {{ operation }}
