@@ -136,7 +136,7 @@ namespace OpenApiSdkGenerator {
         
         /// <summary>
         ///   Looks up a localized string similar to #nullable enable
-        ///namespace RestEase
+        ///namespace {{ namespace }}
         ///{
         ///    public class NoContentResponse
         ///    {

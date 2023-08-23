@@ -169,7 +169,7 @@ namespace {{ namespace }}
   </data>
   <data name="NoContentResponse" xml:space="preserve">
     <value>#nullable enable
-namespace RestEase
+namespace {{ namespace }}
 {
     public class NoContentResponse
     {
