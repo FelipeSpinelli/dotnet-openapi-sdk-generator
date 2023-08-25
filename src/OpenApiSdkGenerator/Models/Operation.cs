@@ -13,7 +13,7 @@ namespace OpenApiSdkGenerator.Models
     public record Operation
     {
         private const string VALID_NAME_CHARACTERS_PATTERN = "[^0-9a-zA-Z]+";
-        private const string CANCELLATIONTOKEN_PARAMETER_DECLARATION = "CancellationToken cancellationToken";
+        private const string CANCELLATIONTOKEN_PARAMETER_DECLARATION = "CancellationToken cancellationToken = default";
 
         [JsonIgnore]
         public string Path { get; set; } = null!;
