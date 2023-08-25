@@ -108,6 +108,14 @@ namespace OpenApiSdkGenerator.Models
                     Encoding.UTF8
                 )
             );
+            context.AddSource(
+                "RequesCustomHeadersInjector.g.cs",
+                SourceText.From(
+                    CodeBoilerplates.RequesCustomHeadersInjector
+                        .Replace("{{ namespace }}", _namespace),
+                    Encoding.UTF8
+                )
+            );
 
             foreach (var schema in _globalReferences.Where(x => x.Value.ShouldGenerate()).Select(x => x.Value))
             {

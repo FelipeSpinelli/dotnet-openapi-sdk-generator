@@ -52,6 +52,9 @@ namespace OpenApiSdkGenerator.Models
         [JsonIgnore]
         public bool ShouldBeGenerated { get; set; } = true;
 
+        [JsonIgnore]
+        public bool ShouldHaveCustomHeadersParameter { get; set; } = false;
+
         public override string ToString()
         {
             var template = Template.Parse(CodeBoilerplates.ApiClientOperation);
@@ -98,7 +101,8 @@ namespace OpenApiSdkGenerator.Models
                 GetMethodParametersFromPath(),
                 GetMethodParametersFromHeaders(),
                 GetMethodParametersFromQuery(),
-                RequestBody?.ToString() ?? string.Empty
+                RequestBody?.ToString() ?? string.Empty,
+                GetCustomDataParameter()
 
             }.Where(x => !string.IsNullOrWhiteSpace(x)));
         }
@@ -131,6 +135,17 @@ namespace OpenApiSdkGenerator.Models
             return $"{ApiDefinition.GetOptions().GetQueryAttribute()} {queryParamsClassName} query";
         }
 
+        private string GetCustomDataParameter()
+        {
+            if (!ShouldHaveCustomHeadersParameter)
+            {
+                return string.Empty;
+            }
+
+            const string CUSTOM_DATA_PARAMETER = "[HttpRequestMessageProperty(\"custom-headers\")] IDictionary<string, string>? customData = null";
+            return CUSTOM_DATA_PARAMETER;
+        }
+
         public Operation ApplySdkOptions(SdkOptions? options)
         {
             if (options == null || options.Operations == null)
@@ -158,7 +173,8 @@ namespace OpenApiSdkGenerator.Models
                 Attributes = (options
                     .DefaultOperationAttributes ?? Array.Empty<string>())
                     .Concat(sdkOperationOptions?.Attributes ?? Array.Empty<string>())
-                    .ToArray()
+                    .ToArray(),
+                ShouldHaveCustomHeadersParameter = sdkOperationOptions?.CustomHeadersParameterEnabled ?? false
             };
         }
     }

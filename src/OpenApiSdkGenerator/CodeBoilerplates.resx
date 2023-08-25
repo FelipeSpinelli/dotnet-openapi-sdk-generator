@@ -293,6 +293,41 @@ namespace {{ namespace }}
 }
 #nullable restore</value>
   </data>
+  <data name="RequesCustomHeadersInjector" xml:space="preserve">
+    <value>// &lt;auto-generated /&gt;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+
+
+namespace {{ namespace }}
+{
+    public class RequestCustomHeadersInjector : DelegatingHandler
+    {
+        protected override Task&lt;HttpResponseMessage&gt; SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            if (!request.Properties.ContainsKey("custom-headers"))
+            {
+                return base.SendAsync(request, cancellationToken);
+            }
+
+            var customHeaders = (IDictionary&lt;string, string&gt;?)request.Properties["custom-headers"];
+            if (customHeaders == null)
+            {
+                return base.SendAsync(request, cancellationToken);
+            }
+
+            foreach (var customHeader in customHeaders)
+            {
+                request.Headers.TryAddWithoutValidation(customHeader.Key, customHeader.Value);
+            }
+            
+            return base.SendAsync(request, cancellationToken);
+        }
+    }
+}</value>
+  </data>
   <data name="SdkServicesCollectionExtensions" xml:space="preserve">
     <value>// &lt;auto-generated /&gt;
 using Microsoft.Extensions.Configuration;

@@ -178,6 +178,30 @@ namespace OpenApiSdkGenerator {
         
         /// <summary>
         ///   Looks up a localized string similar to // &lt;auto-generated /&gt;
+        ///using System.Collections.Generic;
+        ///using System.Net.Http;
+        ///using System.Threading;
+        ///using System.Threading.Tasks;
+        ///
+        ///
+        ///namespace {{ namespace }}
+        ///{
+        ///    public class RequestCustomHeadersInjector : DelegatingHandler
+        ///    {
+        ///        protected override Task&lt;HttpResponseMessage&gt; SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        ///        {
+        ///            if (!request.Properties.ContainsKey(&quot;custom-headers&quot;))
+        ///            {
+        ///                return base.SendAsync(reque [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string RequesCustomHeadersInjector {
+            get {
+                return ResourceManager.GetString("RequesCustomHeadersInjector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // &lt;auto-generated /&gt;
         ///using Microsoft.Extensions.Configuration;
         ///using RestEase.HttpClientFactory;
         ///using System.Diagnostics.CodeAnalysis;
