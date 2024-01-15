@@ -17,8 +17,8 @@ namespace OpenApiSdkGenerator
     public class ApiClientSourceGenerator : ISourceGenerator
     {
         const string SDK_DEFINITIONS_FILENAME = "openapi-sdk-generator.yaml";
-        const string OPENAPI_FILENAME = "openapi.json";
 
+        private static readonly string[] _openApiFileValidExtensions = new[] { ".json", ".yaml", ".yml" };
         private static readonly DiagnosticDescriptor InvalidJsonError = new(id: "OPENAPISDKGEN001",
                                                                             title: "Couldn't parse json file",
                                                                             messageFormat: "Couldn't parse json file '{0}' Reason[{1}]",
@@ -38,9 +38,9 @@ namespace OpenApiSdkGenerator
                 MissingMemberHandling = MissingMemberHandling.Ignore,
             };
 
-//#if DEBUG
-//            Debugger.Launch();
-//#endif
+            //#if DEBUG
+            //            Debugger.Launch();
+            //#endif
         }
 
         public void Execute(GeneratorExecutionContext context)
@@ -61,17 +61,17 @@ namespace OpenApiSdkGenerator
         {
             var @namespace = context.Compilation?.AssemblyName ?? "OpenApiSdkGenerator";
 
-            var openapiFile = context.AdditionalFiles
-                .FirstOrDefault(f => f.Path.EndsWith(OPENAPI_FILENAME, StringComparison.InvariantCultureIgnoreCase));
+            var openapiFiles = context.AdditionalFiles
+                .Where(f => _openApiFileValidExtensions.Contains(f.Path));
 
-            if (openapiFile == null)
+            if (openapiFiles is null || !openapiFiles.Any())
             {
                 return;
             }
 
-            _openApiFileName = openapiFile.Path;
+            _openApiFileName = openapiFiles.Path;
 
-            var jsonContent = openapiFile.GetText(context.CancellationToken)?.ToString();
+            var jsonContent = openapiFiles.GetText(context.CancellationToken)?.ToString();
 
             if (string.IsNullOrEmpty(jsonContent))
             {
