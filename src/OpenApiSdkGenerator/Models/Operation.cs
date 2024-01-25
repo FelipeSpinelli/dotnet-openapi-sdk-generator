@@ -132,7 +132,7 @@ namespace OpenApiSdkGenerator.Models
                 return string.Empty;
             }
             
-            return $"{ApiDefinition.GetOptions().GetQueryAttribute()} {queryParamsClassName} query";
+            return $"{SdkOptions.Instance.GetQueryAttribute()} {queryParamsClassName} query";
         }
 
         private string GetCustomDataParameter()

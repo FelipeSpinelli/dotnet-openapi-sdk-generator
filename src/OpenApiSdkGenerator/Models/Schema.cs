@@ -73,7 +73,7 @@ namespace OpenApiSdkGenerator.Models
 
         public override string ToString()
         {
-            var typeOptions = ApiDefinition.GetTypeOptions(OriginalName);
+            var typeOptions = SdkOptions.Instance.GetTypeOptions(OriginalName);
 
             if (typeOptions.Ignore)
             {
@@ -112,8 +112,8 @@ namespace OpenApiSdkGenerator.Models
                 .ToArray();
         }
 
-        public bool ShouldGenerate() => !ApiDefinition.GetTypeOptions(OriginalName).Ignore;
+        public bool ShouldGenerate() => !SdkOptions.Instance.GetTypeOptions(OriginalName).Ignore;
 
-        public static Schema? GetByReference(string reference) => ApiDefinition.GetSchemaByReference(reference);
+        public static Schema? GetByReference(string reference) => ApiDefinition.Current.GetSchemaByReference(reference);
     }
 }
