@@ -111,12 +111,14 @@ namespace OpenApiSdkGenerator.Models
         {
             return string.Join(",", Parameters
                 .Where(p => p.In == Enumerators.ParameterLocation.Path)
-                .Select(p => $"[Path] {p.ToString().Replace("public", string.Empty).Replace("{ get; set; }", string.Empty).Trim()}"));
+                .Select(p => ToMethodParameterSignature(p.ToString(), "[Path]")));
         }
 
         private string GetMethodParametersFromHeaders()
         {
-            return string.Join(",", Parameters.Where(p => p.In == Enumerators.ParameterLocation.Header).Select(p => p.ToString()));
+            return string.Join(",", Parameters
+                .Where(p => p.In == Enumerators.ParameterLocation.Header)
+                .Select(p => ToMethodParameterSignature(p.ToString(), string.Empty)));
         }
 
         private string GetMethodParametersFromQuery()
@@ -176,6 +178,11 @@ namespace OpenApiSdkGenerator.Models
                     .ToArray(),
                 ShouldHaveCustomHeadersParameter = sdkOperationOptions?.CustomHeadersParameterEnabled ?? false
             };
+        }
+
+        private static string ToMethodParameterSignature(string value, string binderType)
+        {
+            return $"{binderType} {value.Replace("public", string.Empty).Replace("{ get; set; }", string.Empty)}".Trim();
         }
     }
 }

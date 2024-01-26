@@ -8,7 +8,7 @@ namespace OpenApiSdkGenerator.Extensions
     {
         public static string Sanitize(this string value)
         {
-            var invalidChars = "@~`!#$%^&()=+';:\"\\/?>.<,]".ToCharArray();
+            var invalidChars = "@~`!#$%^&()=+';:\"\\/?>.<,]-".ToCharArray();
 
             var buffer = ArrayPool<char>.Shared.Rent(value.Length * 2);
             var valueAsSpan = value.AsSpan();
@@ -23,16 +23,25 @@ namespace OpenApiSdkGenerator.Extensions
                 }
 
                 buffer[bufferIndex++] = '_';
-                buffer[bufferIndex++] = '_';
             }
 
             var sanitizedValue = string.Join(string.Empty, buffer).Substring(0, bufferIndex);
             ArrayPool<char>.Shared.Return(buffer, true);
 
-            return sanitizedValue;
+            return sanitizedValue.ToCamelCase();
         }
 
         public static string ToPascalCase(this string value)
+        {
+            return InternalCaseConvertion(value, mustUpperFirstChar: true);
+        }
+
+        public static string ToCamelCase(this string value)
+        {
+            return InternalCaseConvertion(value, mustUpperFirstChar: false);
+        }
+
+        private static string InternalCaseConvertion(string value, bool mustUpperFirstChar)
         {
             var buffer = ArrayPool<char>.Shared.Rent(value.Length * 2);
             var valueAsSpan = value.AsSpan();
@@ -43,7 +52,7 @@ namespace OpenApiSdkGenerator.Extensions
             {
                 if (i == 0)
                 {
-                    buffer[bufferIndex++] = char.ToUpper(valueAsSpan[i]);
+                    buffer[bufferIndex++] = mustUpperFirstChar ? char.ToUpper(valueAsSpan[i]) : valueAsSpan[i];
                     continue;
                 }
 
@@ -57,10 +66,10 @@ namespace OpenApiSdkGenerator.Extensions
                 mustBeUpper = false;
             }
 
-            var valueAsPascalCase = string.Join(string.Empty, buffer).Substring(0, bufferIndex);
+            var result = string.Join(string.Empty, buffer).Substring(0, bufferIndex);
             ArrayPool<char>.Shared.Return(buffer, true);
 
-            return valueAsPascalCase;
+            return result;
         }
     }
 }

@@ -34,7 +34,7 @@ namespace OpenApiSdkGenerator.Models
             var decorator = In switch
             {
                 ParameterLocation.Query => $"[{(ApiDefinition.GetOptions().QuerySerialization.SerializeAsRawString ? "Query" : "JsonProperty")}(\"{Name}\")]\r\n",
-                ParameterLocation.Header => $"[Header(\"{Name}\")]\r\n",
+                ParameterLocation.Header => $"[Header(\"{Name}\")]",
                 _ => string.Empty
             };
 
