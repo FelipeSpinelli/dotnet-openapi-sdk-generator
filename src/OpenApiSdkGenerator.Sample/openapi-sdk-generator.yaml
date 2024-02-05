@@ -1,19 +1,37 @@
-﻿apiName: PetApi
+apiName: ContractApi
 usings:
-  - "System"
 defaultOperationAttributes:
+  - "[Datadog.Trace.Annotations.Trace]"
 operations:
+  - name: CreateTemplate
+    ignore: true
+  - name: CancelContract
+    ignore: true
+  - name: GetContractById
+    ignore: true
+  - name: GetContractByIdAdmin
+    ignore: true
+  - name: GetContractEvents
+    ignore: true
+  - name: GetTemplateEvents
+    ignore: true
+  - name: GetTermsAndConditions
+    ignore: true
+  - name: SignContract
+    ignore: true
   - name: ApiHealth
     ignore: true
   - name: Ping
     ignore: true
-  - name: FindPets
-    customHeadersParameterEnabled: true
+  - name: GeneratePdf
+    ignore: true
+  - name: ListContractsByFolderId
+    ignore: true
+  - name: UploadArtifacts
+    ignore: true
+  - name: PreviewTemplate
+    ignore: true
 types:
-  - name: NewPet
-    replacementName: CreatePetRequest
-    ignore: false
-querySerialization:
-  serializeAsRawString: true
-  typesFormatting:
-    DateTime: "yyyy-MM-dd HH:mm:ss.fffK"
+  - name: DateOnly
+    replacementName: DateOnly
+    ignore: true

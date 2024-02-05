@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using OpenApiSdkGenerator.Extensions;
 using OpenApiSdkGenerator.JsonConverters;
+using OpenApiSdkGenerator.Models.Sdk;
 using Scriban;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 
-namespace OpenApiSdkGenerator.Models
+namespace OpenApiSdkGenerator.Models.OpenApi
 {
     public record Operation
     {
@@ -131,8 +132,8 @@ namespace OpenApiSdkGenerator.Models
             {
                 return string.Empty;
             }
-            
-            return $"{SdkOptions.Instance.GetQueryAttribute()} {queryParamsClassName} query";
+
+            return $"{ApiClientSettings.Instance.GetQueryAttribute()} {queryParamsClassName} query";
         }
 
         private string GetCustomDataParameter()
@@ -146,7 +147,7 @@ namespace OpenApiSdkGenerator.Models
             return CUSTOM_DATA_PARAMETER;
         }
 
-        public Operation ApplySdkOptions(SdkOptions? options)
+        public Operation ApplySdkOptions(ApiClientSettings? options)
         {
             if (options == null || options.Operations == null)
             {

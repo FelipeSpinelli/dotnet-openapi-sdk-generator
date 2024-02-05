@@ -3,12 +3,13 @@ using Microsoft.CodeAnalysis.Text;
 using Newtonsoft.Json;
 using OpenApiSdkGenerator.Extensions;
 using OpenApiSdkGenerator.JsonConverters;
+using OpenApiSdkGenerator.Models.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OpenApiSdkGenerator.Models;
+namespace OpenApiSdkGenerator.Models.OpenApi;
 public record ApiDefinition
 {
     private static ApiDefinition _current = new();
@@ -35,7 +36,7 @@ public record ApiDefinition
 
     public IEnumerable<Operation> Operations => Paths
         .SelectMany(path => path.Value.GetOperations(path.Key))
-        .Select(operation => operation.ApplySdkOptions(SdkOptions.Instance))
+        .Select(operation => operation.ApplySdkOptions(ApiClientSettings.Instance))
         .Where(operation => operation.ShouldBeGenerated);
 
     public static void SetNamespace(string @namespace) => _namespace = @namespace;
@@ -52,7 +53,7 @@ public record ApiDefinition
 
         foreach (var schema in Components.Schemas)
         {
-            var typeOptions = SdkOptions.Instance.GetTypeOptions(schema.Key);
+            var typeOptions = ApiClientSettings.Instance.GetTypeOptions(schema.Key);
             var newSchema = schema.Value with { Name = typeOptions.GetName(), OriginalName = typeOptions.Name };
             _globalReferences.Add($"#/components/schemas/{Info.GetVersion()}/{schema.Key}", newSchema);
         }
@@ -61,29 +62,29 @@ public record ApiDefinition
     public void GenerateTypes(GeneratorExecutionContext context)
     {
         context.AddSource(
-            "NoContentResponse.g.cs", 
+            "NoContentResponse.g.cs",
             SourceText.From(
                 CodeBoilerplates.NoContentResponse
-                    .Replace("{{ namespace }}", _namespace), 
+                    .Replace("{{ namespace }}", _namespace),
                 Encoding.UTF8
             )
         );
         context.AddSource(
-            "OpenApiSdkGeneratorUtils.g.cs", 
+            "OpenApiSdkGeneratorUtils.g.cs",
             SourceText.From(
                 CodeBoilerplates.OpenApiSdkGeneratorUtils
                     .Replace("{{ namespace }}", _namespace)
-                    .Replace("{{ types_formatting_list }}", SdkOptions.Instance.QuerySerialization.ToString()),
+                    .Replace("{{ types_formatting_list }}", ApiClientSettings.Instance.QuerySerialization.ToString()),
                 Encoding.UTF8
             )
         );
         context.AddSource(
-            $"{GetApiName()}ServicesCollectionExtensions.g.cs", 
+            $"{GetApiName()}ServicesCollectionExtensions.g.cs",
             SourceText.From(
                 CodeBoilerplates.SdkServicesCollectionExtensions
-                    .Replace("{{ namespace }}", _namespace) 
-                    .Replace("{{ api_name }}", GetApiName()) 
-                    .Replace("{{ api_client_name }}", GetApiClientName()), 
+                    .Replace("{{ namespace }}", _namespace)
+                    .Replace("{{ api_name }}", GetApiName())
+                    .Replace("{{ api_client_name }}", GetApiClientName()),
                 Encoding.UTF8
             )
         );
@@ -152,18 +153,18 @@ public record ApiDefinition
 
     public string GetApiName()
     {
-        return string.IsNullOrWhiteSpace(SdkOptions.Instance.ApiName)
-            ? SdkOptions.DEFAULT_APINAME
-            : SdkOptions.Instance.ApiName;
+        return string.IsNullOrWhiteSpace(ApiClientSettings.Instance.ApiName)
+            ? ApiClientSettings.DEFAULT_APINAME
+            : ApiClientSettings.Instance.ApiName;
     }
 
     public void SetAsCurrent() => _current = this;
 
-    public static ApiDefinition? LoadFrom(string? json)
+    public static ApiDefinition? LoadJson(string json)
     {
         json ??= string.Empty;
         if (string.IsNullOrWhiteSpace(json))
-        { 
+        {
             return null;
         }
 
@@ -173,5 +174,11 @@ public record ApiDefinition
             .Replace("#/components/schemas/", $"#/components/schemas/{info.GetVersion()}/");
 
         return JsonConvert.DeserializeObject<ApiDefinition>(jsonCleaned);
+    }
+
+    public static ApiDefinition? LoadYaml(string yaml)
+    {
+        yaml ??= string.Empty;
+        return null;
     }
 }

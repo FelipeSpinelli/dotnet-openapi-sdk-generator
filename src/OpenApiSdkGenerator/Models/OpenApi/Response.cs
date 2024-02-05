@@ -2,7 +2,7 @@
 using OpenApiSdkGenerator.JsonConverters;
 using System.Collections.Generic;
 
-namespace OpenApiSdkGenerator.Models
+namespace OpenApiSdkGenerator.Models.OpenApi
 {
     public record Response
     {

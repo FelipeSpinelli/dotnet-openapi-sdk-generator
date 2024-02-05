@@ -1,10 +1,17 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace OpenApiSdkGenerator.Models;
+namespace OpenApiSdkGenerator.Models.OpenApi;
 
 public record Info
 {
-    private const string V1 = "v1";
+    private static readonly Info _empty = new Info
+    {
+        Description = null!,
+        Title = null!,
+        Version = V1
+    };
+
+    private const string V1 = "V1";
     public string Title { get; set; } = null!;
     public string Description { get; set; } = null!;
     public string Version { get; set; } = null!;
@@ -16,30 +23,23 @@ public record Info
             return V1;
         }
 
-        return Version.Replace(".","_");
+        return $"V{Version.Split('.')[0]}";
     }
 
     public static Info LoadFrom(string json)
     {
-        var empty = new Info
-        {
-            Description = null!,
-            Title = null!,
-            Version = V1
-        };
-
         if (string.IsNullOrEmpty(json))
         {
-            return empty;
+            return _empty;
         }
-        
+
         var jObj = JObject.Parse(json);
 
         if (jObj is null || !jObj.ContainsKey("info"))
         {
-            return empty;
+            return _empty;
         }
 
-        return jObj["info"]!.ToObject<Info>() ?? empty;
+        return jObj["info"]!.ToObject<Info>() ?? _empty;
     }
 }

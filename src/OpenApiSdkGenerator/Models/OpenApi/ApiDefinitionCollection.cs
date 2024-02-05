@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenApiSdkGenerator.Models;
+namespace OpenApiSdkGenerator.Models.OpenApi;
 
 public record ApiDefinitionCollection
 {

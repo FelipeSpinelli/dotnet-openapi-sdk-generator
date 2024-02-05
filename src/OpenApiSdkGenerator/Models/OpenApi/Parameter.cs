@@ -1,13 +1,14 @@
 ﻿using Newtonsoft.Json;
 using OpenApiSdkGenerator.Extensions;
 using OpenApiSdkGenerator.JsonConverters;
-using OpenApiSdkGenerator.Models.Enumerators;
+using OpenApiSdkGenerator.Models.OpenApi.Enumerators;
+using OpenApiSdkGenerator.Models.Sdk;
 using Scriban;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenApiSdkGenerator.Models
+namespace OpenApiSdkGenerator.Models.OpenApi
 {
     public record Parameter
     {
@@ -33,7 +34,7 @@ namespace OpenApiSdkGenerator.Models
         {
             var decorator = In switch
             {
-                ParameterLocation.Query => $"[{(SdkOptions.Instance.QuerySerialization.SerializeAsRawString ? "Query" : "JsonProperty")}(\"{Name}\")]\r\n",
+                ParameterLocation.Query => $"[{(ApiClientSettings.Instance.QuerySerialization.SerializeAsRawString ? "Query" : "JsonProperty")}(\"{Name}\")]\r\n",
                 ParameterLocation.Header => $"[Header(\"{Name}\")]\r\n",
                 _ => string.Empty
             };
@@ -43,7 +44,7 @@ namespace OpenApiSdkGenerator.Models
 
         public static string GetAsQueryClass(string operationName, IEnumerable<Parameter> parameters)
         {
-            var typeOptions = SdkOptions.Instance.GetTypeOptions(GetAsQueryParamsClassName(operationName));
+            var typeOptions = ApiClientSettings.Instance.GetTypeOptions(GetAsQueryParamsClassName(operationName));
 
             if (typeOptions.Ignore)
             {
@@ -69,7 +70,7 @@ namespace OpenApiSdkGenerator.Models
             var template = Template.Parse(CodeBoilerplates.ApiClientType);
             return template.Render(new
             {
-                NewtonsoftUsing = SdkOptions.Instance.QuerySerialization.SerializeAsRawString ? string.Empty : "using Newtonsoft.Json;",
+                NewtonsoftUsing = ApiClientSettings.Instance.QuerySerialization.SerializeAsRawString ? string.Empty : "using Newtonsoft.Json;",
                 Namespace = ApiDefinition.GetNamespace(),
                 Name = typeOptions.GetName(),
                 Properties = properties,
@@ -81,7 +82,7 @@ namespace OpenApiSdkGenerator.Models
         public static string GetAsQueryParamsClassName(string operationName)
         {
             var name = $"{operationName}QueryParams";
-            var typeOptions = SdkOptions.Instance.GetTypeOptions(name);
+            var typeOptions = ApiClientSettings.Instance.GetTypeOptions(name);
 
             return typeOptions.GetName();
         }

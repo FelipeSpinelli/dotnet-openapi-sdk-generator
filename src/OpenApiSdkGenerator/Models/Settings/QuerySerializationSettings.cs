@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace OpenApiSdkGenerator.Models
+namespace OpenApiSdkGenerator.Models.Sdk
 {
-    public record SdkQuerySerializationOptions
+    public record QuerySerializationSettings
     {
         public bool SerializeAsRawString { get; set; } = true;
-        public Dictionary<string, string> TypesFormatting { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> TypesFormatting { get; set; } = [];
 
         public override string ToString()
         {

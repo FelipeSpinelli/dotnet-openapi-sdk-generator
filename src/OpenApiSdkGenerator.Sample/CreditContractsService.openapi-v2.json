@@ -1,0 +1,475 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Credit Contracts Service",
+    "description": "Credit API Microservices Set",
+    "version": "2.0"
+  },
+  "paths": {
+    "/api/v2/contracts/credit-card-acceptance": {
+      "post": {
+        "tags": [
+          "CreateCreditCardAcceptanceTerm"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCreditCardAcceptanceTermContractRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractCreationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "ApiHealth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Healthy or Degraded"
+          },
+          "503": {
+            "description": "Unhealthy"
+          }
+        }
+      }
+    },
+    "/health/self": {
+      "get": {
+        "tags": [
+          "Ping"
+        ],
+        "responses": {
+          "200": {
+            "description": "Healthy"
+          },
+          "503": {
+            "description": "Unhealthy"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddressRequest": {
+        "required": [
+          "city",
+          "neighborhood",
+          "number",
+          "postal_code",
+          "state",
+          "street"
+        ],
+        "type": "object",
+        "properties": {
+          "postal_code": {
+            "maxLength": 300,
+            "minLength": 1,
+            "type": "string"
+          },
+          "state": {
+            "maxLength": 300,
+            "minLength": 1,
+            "type": "string"
+          },
+          "city": {
+            "maxLength": 300,
+            "minLength": 1,
+            "type": "string"
+          },
+          "complement": {
+            "maxLength": 300,
+            "type": "string",
+            "nullable": true
+          },
+          "street": {
+            "maxLength": 300,
+            "minLength": 1,
+            "type": "string"
+          },
+          "number": {
+            "maxLength": 300,
+            "minLength": 1,
+            "type": "string"
+          },
+          "neighborhood": {
+            "maxLength": 300,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "BankAccountRequest": {
+        "required": [
+          "bank_number",
+          "number",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "bank_name": {
+            "maxLength": 150,
+            "type": "string",
+            "nullable": true
+          },
+          "bank_number": {
+            "maxLength": 5,
+            "minLength": 1,
+            "type": "string"
+          },
+          "branch_number": {
+            "maxLength": 25,
+            "type": "string",
+            "nullable": true
+          },
+          "branch_digit": {
+            "maxLength": 5,
+            "type": "string",
+            "nullable": true
+          },
+          "number": {
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          },
+          "digit": {
+            "maxLength": 5,
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "maxLength": 8,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ContractCreationResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateCreditCardAcceptanceTermContractRequest": {
+        "required": [
+          "customer",
+          "involved_parties",
+          "origin_id",
+          "receivers_address",
+          "signature_deadline"
+        ],
+        "type": "object",
+        "properties": {
+          "payment_method": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "origin_id": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "receivers_address": {
+            "$ref": "#/components/schemas/AddressRequest"
+          },
+          "signature_deadline": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "due_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/CustomerRequest"
+          },
+          "involved_parties": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EndorsementRequest"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerRequest": {
+        "required": [
+          "address",
+          "document",
+          "email",
+          "name",
+          "stone_account"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "document": {
+            "$ref": "#/components/schemas/PersonalDocumentRequest"
+          },
+          "email": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "stone_account": {
+            "$ref": "#/components/schemas/BankAccountRequest"
+          },
+          "other_account": {
+            "$ref": "#/components/schemas/BankAccountRequest"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressRequest"
+          },
+          "nationality": {
+            "type": "string",
+            "nullable": true
+          },
+          "marital_status": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EndorsementRequest": {
+        "required": [
+          "address",
+          "device_id",
+          "document",
+          "email",
+          "ip_address",
+          "marital_status",
+          "name",
+          "nationality"
+        ],
+        "type": "object",
+        "properties": {
+          "external_id": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "endorsement_type": {
+            "$ref": "#/components/schemas/EndorsementType"
+          },
+          "ip_address": {
+            "maxLength": 150,
+            "minLength": 1,
+            "type": "string"
+          },
+          "device_id": {
+            "maxLength": 150,
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "document": {
+            "$ref": "#/components/schemas/PersonalDocumentRequest"
+          },
+          "email": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "stone_account": {
+            "$ref": "#/components/schemas/BankAccountRequest"
+          },
+          "other_account": {
+            "$ref": "#/components/schemas/BankAccountRequest"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressRequest"
+          },
+          "nationality": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "marital_status": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EndorsementType": {
+        "enum": [
+          "Endorsement",
+          "Guarantor",
+          "EndorsementAndGuarantor",
+          "SelfSigner",
+          "JointDebtor"
+        ],
+        "type": "string"
+      },
+      "PaymentMethod": {
+        "enum": [
+          "DEBIT_AND_CREDIT",
+          "CREDIT_ONLY"
+        ],
+        "type": "string"
+      },
+      "PersonalDocumentRequest": {
+        "required": [
+          "number"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "number": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "ValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "JWT Authorization header using the Bearer scheme.",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}

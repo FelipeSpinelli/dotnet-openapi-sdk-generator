@@ -1,0 +1,3607 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Credit Contracts Service",
+    "description": "Credit API Microservices Set",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/v1/contracts/{id}/activate": {
+      "post": {
+        "tags": [
+          "ActivateContract"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/ActivateContractRequest"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Client Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/servicebus/peek": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "channelKey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/contracts/{id}/cancel": {
+      "post": {
+        "tags": [
+          "CancelContract"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/CancelContractRequest"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Client Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contracts/amendment": {
+      "post": {
+        "tags": [
+          "CreateAmendmentContract"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAmendmentContractRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractCreationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contracts": {
+      "post": {
+        "tags": [
+          "CreateContract"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateContractRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractCreationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "SearchContracts"
+        ],
+        "parameters": [
+          {
+            "name": "OriginId",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "Id",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "CustomerDocument",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractResponsePagedResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contracts/credit-card-acceptance": {
+      "post": {
+        "tags": [
+          "CreateCreditCardAcceptanceTerm"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCreditCardAcceptanceTermContractRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractCreationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contracts/credit-card": {
+      "post": {
+        "tags": [
+          "CreateCreditCardContract"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCreditCardContractRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractCreationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contracts/acceptance": {
+      "post": {
+        "tags": [
+          "CreateElectronicAcceptanceContractRequest"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateElectronicAcceptanceContractRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractCreationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/templates": {
+      "post": {
+        "tags": [
+          "CreateTemplate"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTemplateRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTemplateRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTemplateRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTemplateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateCreationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contracts/{id}/pdf": {
+      "post": {
+        "tags": [
+          "GeneratePdf"
+        ],
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "maxLength": 25,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "422": {
+            "description": "Client Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contracts/{id}": {
+      "get": {
+        "tags": [
+          "GetContractById"
+        ],
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/v1/contracts/{Id}": {
+      "get": {
+        "tags": [
+          "GetContractById"
+        ],
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contracts/{id}/events": {
+      "get": {
+        "tags": [
+          "GetContractEvents"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/LoanConcessionContractProjectionGetEventsRequest"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventResponsePagedResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventResponsePagedResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventResponsePagedResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/templates/{id}/events": {
+      "get": {
+        "tags": [
+          "GetTemplateEvents"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/TemplateProjectionGetEventsRequest"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventResponsePagedResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventResponsePagedResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventResponsePagedResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contracts/terms/{type}": {
+      "get": {
+        "tags": [
+          "GetTermsAndConditions"
+        ],
+        "parameters": [
+          {
+            "name": "Type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ContractType"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/pdf": {
+                "schema": { }
+              },
+              "application/json": {
+                "schema": { }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/pdf": {
+                "schema": { }
+              },
+              "application/json": {
+                "schema": { }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contracts/{id}/folder": {
+      "get": {
+        "tags": [
+          "ListContractsByFolderId"
+        ],
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ContractFolderResponse"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/templates/{id}/preview/{scenario}": {
+      "get": {
+        "tags": [
+          "PreviewTemplate"
+        ],
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "maxLength": 25,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "name": "Scenario",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/pdf": {
+                "schema": { }
+              },
+              "application/json": {
+                "schema": { }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/pdf": {
+                "schema": { }
+              },
+              "application/json": {
+                "schema": { }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/templates/{id}/review": {
+      "post": {
+        "tags": [
+          "ReviewTemplate"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/TemplateReviewRequest"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateCreationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contracts/{id}/sign": {
+      "post": {
+        "tags": [
+          "SignContract"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SignContractRequest"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Client Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contracts/{number}/third-party/{document}": {
+      "get": {
+        "tags": [
+          "ThirdPartyPdfDownload"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/ThirdPartyPdfDownloadRequest"
+            }
+          },
+          {
+            "name": "number",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "document",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/templates/{id}/artifacts": {
+      "patch": {
+        "tags": [
+          "UploadArtifacts"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/UploadArtifactsRequest"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateCreationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "ApiHealth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Healthy or Degraded"
+          },
+          "503": {
+            "description": "Unhealthy"
+          }
+        }
+      }
+    },
+    "/health/self": {
+      "get": {
+        "tags": [
+          "Ping"
+        ],
+        "responses": {
+          "200": {
+            "description": "Healthy"
+          },
+          "503": {
+            "description": "Unhealthy"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ActivateContractRequest": {
+        "required": [
+          "external_reference_id",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          },
+          "external_reference_id": {
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddressRequest": {
+        "required": [
+          "city",
+          "neighborhood",
+          "number",
+          "postal_code",
+          "state",
+          "street"
+        ],
+        "type": "object",
+        "properties": {
+          "postal_code": {
+            "maxLength": 300,
+            "minLength": 1,
+            "type": "string"
+          },
+          "state": {
+            "maxLength": 300,
+            "minLength": 1,
+            "type": "string"
+          },
+          "city": {
+            "maxLength": 300,
+            "minLength": 1,
+            "type": "string"
+          },
+          "complement": {
+            "maxLength": 300,
+            "type": "string",
+            "nullable": true
+          },
+          "street": {
+            "maxLength": 300,
+            "minLength": 1,
+            "type": "string"
+          },
+          "number": {
+            "maxLength": 300,
+            "minLength": 1,
+            "type": "string"
+          },
+          "neighborhood": {
+            "maxLength": 300,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddressResponse": {
+        "type": "object",
+        "properties": {
+          "postal_code": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "complement": {
+            "type": "string",
+            "nullable": true
+          },
+          "street": {
+            "type": "string",
+            "nullable": true
+          },
+          "number": {
+            "type": "string",
+            "nullable": true
+          },
+          "neighborhood": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AmendmentContractResponse": {
+        "type": "object",
+        "properties": {
+          "loan_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "interest_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "installment_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "number_of_installments": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "installment_due_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "installments_sum": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "grace_period": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "max_disbursement_deadline_in_days": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "current_debt_amount_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "current_debt_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "retention_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "default_interest": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "late_payment_fee": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "effective_annual_interest_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "lender": {
+            "$ref": "#/components/schemas/LenderResponse"
+          },
+          "amendments": {
+            "$ref": "#/components/schemas/AmendmentsResponse"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AmendmentTermsRequest": {
+        "required": [
+          "change_in_contract_due_date",
+          "change_in_costumer_stone_account",
+          "change_in_credit_release_information",
+          "change_in_grace_period",
+          "change_in_installments_amount",
+          "change_in_installments_due_date",
+          "change_in_interest_rate",
+          "change_in_payment_method",
+          "change_in_third_guarantor_stone_account",
+          "endorser_replacement",
+          "third_guarantor_replacement"
+        ],
+        "type": "object",
+        "properties": {
+          "third_guarantor_replacement": {
+            "type": "boolean"
+          },
+          "endorser_replacement": {
+            "type": "boolean"
+          },
+          "change_in_interest_rate": {
+            "type": "boolean"
+          },
+          "change_in_installments_amount": {
+            "type": "boolean"
+          },
+          "change_in_installments_due_date": {
+            "type": "boolean"
+          },
+          "change_in_contract_due_date": {
+            "type": "boolean"
+          },
+          "change_in_grace_period": {
+            "type": "boolean"
+          },
+          "change_in_costumer_stone_account": {
+            "type": "boolean"
+          },
+          "change_in_third_guarantor_stone_account": {
+            "type": "boolean"
+          },
+          "change_in_credit_release_information": {
+            "type": "boolean"
+          },
+          "change_in_payment_method": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AmendmentsResponse": {
+        "type": "object",
+        "properties": {
+          "third_guarantor_replacement": {
+            "type": "boolean"
+          },
+          "change_in_interest_rate": {
+            "type": "boolean"
+          },
+          "change_in_installments_amount": {
+            "type": "boolean"
+          },
+          "endorser_replacement": {
+            "type": "boolean"
+          },
+          "change_in_installments_due_date": {
+            "type": "boolean"
+          },
+          "change_in_costumer_stone_account": {
+            "type": "boolean"
+          },
+          "change_in_contract_due_date": {
+            "type": "boolean"
+          },
+          "change_in_grace_period": {
+            "type": "boolean"
+          },
+          "change_in_credit_release_information": {
+            "type": "boolean"
+          },
+          "change_in_payment_method": {
+            "type": "boolean"
+          },
+          "change_in_third_guarantor_stone_account": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AnnualEffectiveCost": {
+        "type": "object",
+        "properties": {
+          "installments_sum": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "requested_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "total_amount": {
+            "$ref": "#/components/schemas/CreditExpenses"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AnnualEffectiveCostRequest": {
+        "required": [
+          "total_amount"
+        ],
+        "type": "object",
+        "properties": {
+          "installments_sum": {
+            "maximum": 99999999.99,
+            "minimum": 1,
+            "type": "number",
+            "format": "decimal"
+          },
+          "requested_amount": {
+            "maximum": 99999999.99,
+            "minimum": 1,
+            "type": "number",
+            "format": "decimal"
+          },
+          "total_amount": {
+            "$ref": "#/components/schemas/CreditExpensesRequest"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AnnualEffectiveCostResponse": {
+        "type": "object",
+        "properties": {
+          "installments_sum": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "requested_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "total_amount": {
+            "$ref": "#/components/schemas/CreditExpensesResponse"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ArtifactResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "storage_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "resource_id": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BankAccountRequest": {
+        "required": [
+          "bank_number",
+          "number",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "bank_name": {
+            "maxLength": 150,
+            "type": "string",
+            "nullable": true
+          },
+          "bank_number": {
+            "maxLength": 5,
+            "minLength": 1,
+            "type": "string"
+          },
+          "branch_number": {
+            "maxLength": 25,
+            "type": "string",
+            "nullable": true
+          },
+          "branch_digit": {
+            "maxLength": 5,
+            "type": "string",
+            "nullable": true
+          },
+          "number": {
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          },
+          "digit": {
+            "maxLength": 5,
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "maxLength": 8,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "BankAccountResponse": {
+        "type": "object",
+        "properties": {
+          "bank_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "bank_number": {
+            "type": "string",
+            "nullable": true
+          },
+          "branch_number": {
+            "type": "string",
+            "nullable": true
+          },
+          "branch_digit": {
+            "type": "string",
+            "nullable": true
+          },
+          "number": {
+            "type": "string",
+            "nullable": true
+          },
+          "digit": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CancelContractRequest": {
+        "required": [
+          "external_reference_id",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          },
+          "contract_type": {
+            "$ref": "#/components/schemas/ContractType"
+          },
+          "external_reference_id": {
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CancellationResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "string",
+            "nullable": true
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ContractCreationResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ContractFolderResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "contract_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "contract_status": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "last_update_date": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ContractModality": {
+        "enum": [
+          "Installments",
+          "RevolvingCredit"
+        ],
+        "type": "string"
+      },
+      "ContractResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "number": {
+            "type": "string",
+            "nullable": true
+          },
+          "origin_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "contract_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "due_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "signature_deadline": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "signature_date": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "expired_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "customer": {
+            "$ref": "#/components/schemas/CustomerResponse"
+          },
+          "cancellation": {
+            "$ref": "#/components/schemas/CancellationResponse"
+          },
+          "document": {
+            "$ref": "#/components/schemas/ArtifactResponse"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "creation_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_update_date": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "loan_concession": {
+            "$ref": "#/components/schemas/LoanConcessionContractResponse"
+          },
+          "amendment": {
+            "$ref": "#/components/schemas/AmendmentContractResponse"
+          },
+          "electronic_acceptance": {
+            "$ref": "#/components/schemas/ElectronicAcceptanceContractResponse"
+          },
+          "credit_card_term": {
+            "$ref": "#/components/schemas/CreditCardAcceptanceTermContractResponse"
+          },
+          "credit_card_contract": {
+            "$ref": "#/components/schemas/CreditCardContractResponse"
+          },
+          "involved_parties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InvolvedPartyResponse"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ContractResponsePagedResult": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContractResponse"
+            },
+            "nullable": true
+          },
+          "paging": {
+            "$ref": "#/components/schemas/PagedResultDetails"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ContractType": {
+        "enum": [
+          "CCB_SINGLE_PARTNER",
+          "SINGLE_PARTNER_BCA",
+          "TCD",
+          "CONFESSIONS_JUDGMENT_AGREEMENT",
+          "AMENDMENT_BCA",
+          "ELECTRONIC_ACCEPTANCE",
+          "CREDIT_CARD_ACCEPTANCE_TERM",
+          "CREDIT_CARD_BCA"
+        ],
+        "type": "string"
+      },
+      "CreateAmendmentContractRequest": {
+        "required": [
+          "amendment_terms",
+          "credit_endorsement_agreement_date",
+          "current_debt_amount_date",
+          "lender",
+          "origin_id",
+          "original_loan_id",
+          "signature_deadline"
+        ],
+        "type": "object",
+        "properties": {
+          "origin_id": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "original_loan_id": {
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          },
+          "current_debt_amount_date": {
+            "minLength": 1,
+            "type": "string",
+            "format": "date-time"
+          },
+          "current_debt_amount": {
+            "maximum": 99999999.99,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "effective_annual_interest_rate": {
+            "maximum": 2.5,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "interest_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "installment_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "number_of_installments": {
+            "maximum": 120,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "installment_due_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "installments_sum": {
+            "maximum": 99999999.99,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "due_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "signature_deadline": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "credit_endorsement_agreement_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "grace_period": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "max_disbursement_deadline_in_days": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/CustomerRequest"
+          },
+          "third_guarantor": {
+            "$ref": "#/components/schemas/EndorsementRequest"
+          },
+          "endorser": {
+            "$ref": "#/components/schemas/EndorsementRequest"
+          },
+          "lender": {
+            "$ref": "#/components/schemas/LenderRequest"
+          },
+          "amendment_terms": {
+            "$ref": "#/components/schemas/AmendmentTermsRequest"
+          },
+          "retention_rate": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateContractRequest": {
+        "required": [
+          "annual_effective_cost",
+          "customer",
+          "origin_id",
+          "signature_deadline",
+          "third_guarantor"
+        ],
+        "type": "object",
+        "properties": {
+          "contract_type": {
+            "$ref": "#/components/schemas/ContractType"
+          },
+          "origin_id": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "credit_amount": {
+            "maximum": 99999999.99,
+            "minimum": 1,
+            "type": "number",
+            "format": "decimal"
+          },
+          "requested_amount": {
+            "maximum": 99999999.99,
+            "minimum": 1,
+            "type": "number",
+            "format": "decimal"
+          },
+          "interest_rate": {
+            "maximum": 1,
+            "minimum": 0.000000001,
+            "type": "number",
+            "format": "decimal"
+          },
+          "effective_annual_interest_rate": {
+            "maximum": 2.5,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "daily_tax_rate": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "installment_amount": {
+            "maximum": 99999999.99,
+            "minimum": 1,
+            "type": "number",
+            "format": "decimal"
+          },
+          "number_of_installments": {
+            "maximum": 120,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "installment_due_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "installments_sum": {
+            "maximum": 99999999.99,
+            "minimum": 1,
+            "type": "number",
+            "format": "decimal"
+          },
+          "annual_effective_cost_rate": {
+            "maximum": 2.5,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "annual_effective_cost": {
+            "$ref": "#/components/schemas/AnnualEffectiveCostRequest"
+          },
+          "contract_due_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "signature_deadline": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "retention_rate": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "grace_period": {
+            "maximum": 365,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/CustomerRequest"
+          },
+          "third_guarantor": {
+            "$ref": "#/components/schemas/EndorsementRequest"
+          },
+          "endorser": {
+            "$ref": "#/components/schemas/EndorsementRequest"
+          },
+          "max_disbursement_period_in_business_days": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateCreditCardAcceptanceTermContractRequest": {
+        "required": [
+          "customer",
+          "involved_parties",
+          "origin_id",
+          "receivers_address",
+          "signature_deadline"
+        ],
+        "type": "object",
+        "properties": {
+          "payment_method": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "origin_id": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "receivers_address": {
+            "$ref": "#/components/schemas/AddressRequest"
+          },
+          "signature_deadline": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "due_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/CustomerRequest"
+          },
+          "involved_parties": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EndorsementRequest"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateCreditCardContractRequest": {
+        "required": [
+          "annual_effective_cost",
+          "authorized_signatory",
+          "credit_identification",
+          "customer",
+          "invoice_due_date",
+          "invoice_id",
+          "origin_id",
+          "third_guarantor"
+        ],
+        "type": "object",
+        "properties": {
+          "contract_modality": {
+            "$ref": "#/components/schemas/ContractModality"
+          },
+          "origin_id": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "credit_identification": {
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          "invoice_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "type": "string"
+          },
+          "invoice_due_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "requested_amount": {
+            "maximum": 99999999.99,
+            "minimum": 1,
+            "type": "number",
+            "format": "decimal"
+          },
+          "credit_amount": {
+            "maximum": 99999999.99,
+            "minimum": 1,
+            "type": "number",
+            "format": "decimal"
+          },
+          "interest_rate": {
+            "maximum": 5,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "effective_annual_interest_rate": {
+            "maximum": 2.5,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "daily_tax_rate": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "installment_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "number_of_installments": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "installment_due_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "installments_sum": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "annual_effective_cost_rate": {
+            "maximum": 9,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "annual_effective_cost": {
+            "$ref": "#/components/schemas/AnnualEffectiveCostRequest"
+          },
+          "contract_due_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "retention_rate": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "grace_period": {
+            "maximum": 365,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/CustomerRequest"
+          },
+          "third_guarantor": {
+            "$ref": "#/components/schemas/EndorsementRequest"
+          },
+          "joint_debtor": {
+            "$ref": "#/components/schemas/EndorsementRequest"
+          },
+          "authorized_signatory": {
+            "$ref": "#/components/schemas/EndorsementRequest"
+          },
+          "second_authorized_signatory": {
+            "$ref": "#/components/schemas/EndorsementRequest"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateElectronicAcceptanceContractRequest": {
+        "required": [
+          "customer",
+          "involved_parties",
+          "origin_id",
+          "original_contract_id",
+          "signature_deadline"
+        ],
+        "type": "object",
+        "properties": {
+          "origin_id": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "original_contract_id": {
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          },
+          "signature_deadline": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "due_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/CustomerRequest"
+          },
+          "involved_parties": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EndorsementRequest"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateTemplateRequest": {
+        "required": [
+          "effective_from",
+          "metadata"
+        ],
+        "type": "object",
+        "properties": {
+          "effective_from": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "contract_type": {
+            "$ref": "#/components/schemas/ContractType"
+          },
+          "metadata": {
+            "maxLength": 913,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreditCardAcceptanceTermContractResponse": {
+        "type": "object",
+        "properties": {
+          "payment_method": {
+            "type": "string",
+            "nullable": true
+          },
+          "receivers_address": {
+            "$ref": "#/components/schemas/AddressResponse"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreditCardContractResponse": {
+        "type": "object",
+        "properties": {
+          "contract_modality": {
+            "$ref": "#/components/schemas/ContractModality"
+          },
+          "invoice_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "invoice_due_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "credit_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "requested_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "retention_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "interest_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "effective_annual_interest_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "daily_tax_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "additional_tax_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "default_interest": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "late_payment_fee": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "annual_effective_cost": {
+            "$ref": "#/components/schemas/AnnualEffectiveCost"
+          },
+          "annual_effective_cost_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "grace_period": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "installment_due_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "installments_sum": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "installment_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "number_of_installments": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreditExpenses": {
+        "type": "object",
+        "properties": {
+          "operation_fee": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxes": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "tax_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "insurance_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "other_charges": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "requested_amount_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "total_amount_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "operation_fee_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxes_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "tax_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "insurance_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "total_amount": {
+            "type": "number",
+            "format": "decimal",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreditExpensesRequest": {
+        "type": "object",
+        "properties": {
+          "operation_fee": {
+            "maximum": 99999999.99,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxes": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "tax_amount": {
+            "maximum": 99999999.99,
+            "minimum": 1,
+            "type": "number",
+            "format": "decimal"
+          },
+          "insurance_amount": {
+            "maximum": 99999999.99,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "other_charges": {
+            "maximum": 99999999.99,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "requested_amount_rate": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "total_amount_rate": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "operation_fee_rate": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxes_rate": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "tax_rate": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          },
+          "insurance_rate": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number",
+            "format": "decimal"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreditExpensesResponse": {
+        "type": "object",
+        "properties": {
+          "insurance_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "total_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "operation_fee": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxes": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "tax_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "requested_amount_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "insurance_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "other_charges": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "total_amount_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "taxes_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "tax_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "operation_fee_rate": {
+            "type": "number",
+            "format": "decimal"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerRequest": {
+        "required": [
+          "address",
+          "document",
+          "email",
+          "name",
+          "stone_account"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "document": {
+            "$ref": "#/components/schemas/PersonalDocumentRequest"
+          },
+          "email": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "stone_account": {
+            "$ref": "#/components/schemas/BankAccountRequest"
+          },
+          "other_account": {
+            "$ref": "#/components/schemas/BankAccountRequest"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressRequest"
+          },
+          "nationality": {
+            "type": "string",
+            "nullable": true
+          },
+          "marital_status": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "external_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "document_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "document_number": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "nationality": {
+            "type": "string",
+            "nullable": true
+          },
+          "marital_status": {
+            "type": "string",
+            "nullable": true
+          },
+          "stone_account": {
+            "$ref": "#/components/schemas/BankAccountResponse"
+          },
+          "other_account": {
+            "$ref": "#/components/schemas/BankAccountResponse"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressResponse"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ElectronicAcceptanceContractResponse": {
+        "type": "object",
+        "properties": {
+          "original_contract_id": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EndorsementRequest": {
+        "required": [
+          "address",
+          "device_id",
+          "document",
+          "email",
+          "ip_address",
+          "marital_status",
+          "name",
+          "nationality",
+          "stone_account"
+        ],
+        "type": "object",
+        "properties": {
+          "external_id": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "endorsement_type": {
+            "$ref": "#/components/schemas/EndorsementType"
+          },
+          "ip_address": {
+            "maxLength": 150,
+            "minLength": 1,
+            "type": "string"
+          },
+          "device_id": {
+            "maxLength": 150,
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "document": {
+            "$ref": "#/components/schemas/PersonalDocumentRequest"
+          },
+          "email": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "stone_account": {
+            "$ref": "#/components/schemas/BankAccountRequest"
+          },
+          "other_account": {
+            "$ref": "#/components/schemas/BankAccountRequest"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressRequest"
+          },
+          "nationality": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "marital_status": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EndorsementType": {
+        "enum": [
+          "Endorsement",
+          "Guarantor",
+          "EndorsementAndGuarantor",
+          "SelfSigner",
+          "JointDebtor"
+        ],
+        "type": "string"
+      },
+      "EventResponse": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/IEvent"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EventResponsePagedResult": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventResponse"
+            },
+            "nullable": true
+          },
+          "paging": {
+            "$ref": "#/components/schemas/PagedResultDetails"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GenerateContractPdfRequest": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "IEvent": {
+        "type": "object",
+        "properties": {
+          "target_version": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "saga_process_key": {
+            "type": "string",
+            "nullable": true
+          },
+          "channel_key": {
+            "type": "string",
+            "nullable": true
+          },
+          "event_key": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "aggregate_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "application_key": {
+            "type": "string",
+            "nullable": true
+          },
+          "correlation_key": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "event_committed_timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "class_version": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "session_key": {
+            "type": "string",
+            "nullable": true
+          },
+          "user_email": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "InvolvedPartyResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "external_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "document_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "document_number": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "stone_account": {
+            "$ref": "#/components/schemas/BankAccountResponse"
+          },
+          "other_account": {
+            "$ref": "#/components/schemas/BankAccountResponse"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressResponse"
+          },
+          "signature": {
+            "$ref": "#/components/schemas/SignatureResponse"
+          },
+          "nationality": {
+            "type": "string",
+            "nullable": true
+          },
+          "marital_status": {
+            "type": "string",
+            "nullable": true
+          },
+          "endorsement_type": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LenderRequest": {
+        "required": [
+          "document",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "document": {
+            "$ref": "#/components/schemas/PersonalDocumentRequest"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LenderResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "document_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "document_number": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoanConcessionContractProjectionGetEventsRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "page_size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page_number": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoanConcessionContractResponse": {
+        "type": "object",
+        "properties": {
+          "loan_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "requested_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "credit_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "interest_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "retention_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "daily_tax_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "additional_tax_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "default_interest": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "late_payment_fee": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "effective_annual_interest_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "annual_effective_cost_rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "annual_effective_cost": {
+            "$ref": "#/components/schemas/AnnualEffectiveCostResponse"
+          },
+          "installment_amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "number_of_installments": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "installment_due_date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "installments_sum": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "grace_period": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "max_disbursement_period_in_business_days": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagedResultDetails": {
+        "type": "object",
+        "properties": {
+          "total_items": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "current_page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page_size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page_count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaymentMethod": {
+        "enum": [
+          "DEBIT_AND_CREDIT",
+          "CREDIT_ONLY"
+        ],
+        "type": "string"
+      },
+      "PersonalDocumentRequest": {
+        "required": [
+          "number"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "number": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "SignContractRequest": {
+        "required": [
+          "device_id",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          },
+          "device_id": {
+            "maxLength": 150,
+            "minLength": 1,
+            "type": "string"
+          },
+          "true_client_ip_address": {
+            "type": "string",
+            "nullable": true
+          },
+          "original_forwarded_for_ip_address": {
+            "type": "string",
+            "nullable": true
+          },
+          "forwarded_for_ip_address": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SignatureResponse": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string",
+            "nullable": true
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ip_address": {
+            "type": "string",
+            "nullable": true
+          },
+          "geo_location": {
+            "type": "string",
+            "nullable": true
+          },
+          "device_id": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TemplateCreationResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TemplatePreviewRequest": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          },
+          "scenario": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TemplateProjectionGetEventsRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "page_size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page_number": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TemplateReviewRequest": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/TemplateReviewType"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TemplateReviewType": {
+        "enum": [
+          "Approval",
+          "Rejection"
+        ],
+        "type": "string"
+      },
+      "ThirdPartyPdfDownloadRequest": {
+        "type": "object",
+        "properties": {
+          "contract_number": {
+            "type": "string",
+            "nullable": true
+          },
+          "document_number": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UploadArtifactsRequest": {
+        "required": [
+          "body",
+          "footer",
+          "header",
+          "id",
+          "margins",
+          "terms_and_conditions"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          },
+          "header": {
+            "minLength": 1,
+            "type": "string",
+            "format": "binary"
+          },
+          "body": {
+            "minLength": 1,
+            "type": "string",
+            "format": "binary"
+          },
+          "footer": {
+            "minLength": 1,
+            "type": "string",
+            "format": "binary"
+          },
+          "margins": {
+            "minLength": 1,
+            "type": "string",
+            "format": "binary"
+          },
+          "style": {
+            "type": "string",
+            "format": "binary",
+            "nullable": true
+          },
+          "terms_and_conditions": {
+            "minLength": 1,
+            "type": "string",
+            "format": "binary"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "JWT Authorization header using the Bearer scheme.",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}

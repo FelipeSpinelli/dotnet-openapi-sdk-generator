@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Serialization;
 using System;
 
-namespace OpenApiSdkGenerator.Models
+namespace OpenApiSdkGenerator.Models.OpenApi
 {
     public record MediaType
     {

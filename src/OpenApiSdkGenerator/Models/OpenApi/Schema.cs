@@ -1,13 +1,14 @@
 ﻿using Newtonsoft.Json;
 using OpenApiSdkGenerator.Extensions;
 using OpenApiSdkGenerator.JsonConverters;
-using OpenApiSdkGenerator.Models.Enumerators;
+using OpenApiSdkGenerator.Models.OpenApi.Enumerators;
+using OpenApiSdkGenerator.Models.Sdk;
 using Scriban;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenApiSdkGenerator.Models
+namespace OpenApiSdkGenerator.Models.OpenApi
 {
     public record Schema
     {
@@ -53,7 +54,7 @@ namespace OpenApiSdkGenerator.Models
 
             var name = (Type, Format) switch
             {
-                (DataType.Reference, _) => Schema.GetByReference(Reference)?.Name ?? OBJECT_SCHEMA_NAME,
+                (DataType.Reference, _) => GetByReference(Reference)?.Name ?? OBJECT_SCHEMA_NAME,
                 (DataType.Integer, DataFormat.Int32) => "int",
                 (DataType.Integer, DataFormat.Int64) => "long",
                 (DataType.Integer, _) => "int",
@@ -73,7 +74,7 @@ namespace OpenApiSdkGenerator.Models
 
         public override string ToString()
         {
-            var typeOptions = SdkOptions.Instance.GetTypeOptions(OriginalName);
+            var typeOptions = ApiClientSettings.Instance.GetTypeOptions(OriginalName);
 
             if (typeOptions.Ignore)
             {
@@ -99,7 +100,7 @@ namespace OpenApiSdkGenerator.Models
         {
             if (Type == DataType.Reference)
             {
-                return Schema.GetByReference(Reference)?.GetProperties() ?? Array.Empty<string>();
+                return GetByReference(Reference)?.GetProperties() ?? Array.Empty<string>();
             }
 
             if (EnumValues.Any())
@@ -112,7 +113,7 @@ namespace OpenApiSdkGenerator.Models
                 .ToArray();
         }
 
-        public bool ShouldGenerate() => !SdkOptions.Instance.GetTypeOptions(OriginalName).Ignore;
+        public bool ShouldGenerate() => !ApiClientSettings.Instance.GetTypeOptions(OriginalName).Ignore;
 
         public static Schema? GetByReference(string reference) => ApiDefinition.Current.GetSchemaByReference(reference);
     }

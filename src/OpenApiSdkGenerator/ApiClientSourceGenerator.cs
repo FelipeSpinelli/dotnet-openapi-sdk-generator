@@ -2,7 +2,8 @@
 using Microsoft.CodeAnalysis.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using OpenApiSdkGenerator.Models;
+using OpenApiSdkGenerator.Models.OpenApi;
+using OpenApiSdkGenerator.Models.Sdk;
 using Scriban;
 using System;
 #if DEBUG
@@ -38,9 +39,9 @@ namespace OpenApiSdkGenerator
                 MissingMemberHandling = MissingMemberHandling.Ignore,
             };
 
-//#if DEBUG
-//            Debugger.Launch();
-//#endif
+#if DEBUG
+            Debugger.Launch();
+#endif
         }
 
         public void Execute(GeneratorExecutionContext context)
@@ -70,7 +71,7 @@ namespace OpenApiSdkGenerator
             }
 
             ApiDefinition.SetNamespace(@namespace);
-            SdkOptions.LoadFrom(GetRawSdkOptions(context));
+            ApiClientSettings.LoadFrom(GetRawSdkOptions(context));
             var apiDefinitions = new ApiDefinitionCollection();
 
             foreach (var openapiFile in openapiFiles)
@@ -83,7 +84,7 @@ namespace OpenApiSdkGenerator
                     return;
                 }
 
-                var definition = ApiDefinition.LoadFrom(json);
+                var definition = ApiDefinition.LoadJson(json);
                 if (definition == null)
                 {
                     return;
@@ -117,7 +118,7 @@ namespace OpenApiSdkGenerator
             var template = Template.Parse(CodeBoilerplates.ApiClientInterface);
             return template.Render(new
             {
-                Usings = SdkOptions.Instance.Usings ?? Array.Empty<string>(),
+                Usings = ApiClientSettings.Instance.Usings ?? Array.Empty<string>(),
                 Namespace = ApiDefinition.GetNamespace(),
                 ApiClientName = _definition.GetApiClientName(),
                 ApiDefinition = _definition,
