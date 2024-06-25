@@ -61,6 +61,7 @@ namespace OpenApiSdkGenerator.Models
                 (DataType.Number, DataFormat.Double) => "double",
                 (DataType.Number, DataFormat.Decimal) => "decimal",
                 (DataType.String, DataFormat.DateTime) => "DateTime",
+                (DataType.String, DataFormat.Date) => "DateOnly",
                 (DataType.String, _) => "string",
                 (DataType.Array, _) => $"{Items?.GetTypeName() ?? OBJECT_SCHEMA_NAME}[]",
                 (DataType.Object, _) => OBJECT_SCHEMA_NAME,

@@ -23,6 +23,8 @@ namespace OpenApiSdkGenerator.Models.Enumerators
         [EnumMember(Value = "email")]
         Email,
         [EnumMember(Value = "binary")]
-        Binary
+        Binary,
+        [EnumMember(Value = "date")]
+        Date,
     }
 }
